@@ -21,7 +21,7 @@ export const Todolist = (props: TodolistType) => {
    const [taskTitle, setTaskTitle] = React.useState('');
    const [error, setError] = React.useState<string | null>(null);
 
-   const onAddTask = () => {
+   const addTaskHandler = () => {
       if (taskTitle.trim() !== '') {
          props.addTask(taskTitle.trim());
          setTaskTitle('');
@@ -51,7 +51,7 @@ export const Todolist = (props: TodolistType) => {
                onChange={changeTaskTitleHandler}
                value={taskTitle}
             />
-            <Button onClick={onAddTask} Btntitle={'+'} />
+            <Button onClick={addTaskHandler} Btntitle={'+'} />
             {error && <div className="error-message">{error}</div>}
          </div>
          {props.tasks.length === 0 ? (
