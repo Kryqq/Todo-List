@@ -44,14 +44,10 @@ function App() {
       setTasks(newTasks);
    };
 
-   const changeTaskStatus = (id: string, taskStatus: boolean) => {
-      const task = tasks.find((task) => task.id === id);
-      if (task) {
-         task.isDone = taskStatus;
-         setTasks([...tasks]);
-      }
-	
-   };
+   const changeTaskStatus = (taskId: string, taskStatus: boolean) => {
+	const newState = tasks.map(t => (t.id === taskId ? { ...t, isDone: taskStatus } : t))
+	setTasks(newState)
+	   };
 
    return (
       <div className="App">
@@ -62,6 +58,7 @@ function App() {
             changeTaskStatus={changeTaskStatus}
             title={'what to learn'}
             tasks={tasksForTodolist}
+		  filter={filter}
          />
       </div>
    );
