@@ -5,10 +5,13 @@ type ButtonPropsType = {
 };
 
 export const Button = (props: ButtonPropsType) => {
-	
    const handleButtonClick = () => {
-      props.onClick && props.onClick();
+      props.onClick();
    };
 
-   return <button className={props.className} onClick={handleButtonClick}>{props.Btntitle}</button>;
+   return (
+      <button className={props.className} onClick={handleButtonClick}>
+         {props.Btntitle}
+      </button>
+   );
 };
