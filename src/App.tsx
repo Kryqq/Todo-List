@@ -17,21 +17,25 @@ export type FilterValuesType = 'all' | 'active' | 'completed';
 function App() {
    let [tasks, setTasks] = React.useState<TaskType[]>(tasks1);
    const [filter, setFilter] = React.useState<FilterValuesType>('all');
-  
-   let tasksForTodolist = tasks;
-   if (filter === 'completed') {
-      tasksForTodolist = tasks.filter((t) => t.isDone === true);
-   }
-   if (filter === 'active') {
-      tasksForTodolist = tasks.filter((t) => t.isDone === false);
-   }
+
+   const getStatusForTodoList = (tasks: TaskType[], taskStatus: FilterValuesType) => {
+      if (taskStatus === 'completed') {
+         return tasks.filter((t) => t.isDone === true);
+      }
+      if (taskStatus === 'active') {
+         return tasks.filter((t) => t.isDone === false);
+      } else return tasks;
+   };
+
+   const changeFilter = (value: FilterValuesType) => {
+      setFilter(value);
+   };
+
+   let tasksForTodolist = getStatusForTodoList(tasks, filter);
 
    const removeTask = (id: string) => {
       const newTasks = tasks.filter((t) => t.id !== id);
       setTasks(newTasks);
-   };
-   const changeFilter = (value: FilterValuesType) => {
-      setFilter(value);
    };
 
    const addTask = (title: string) => {
@@ -45,9 +49,9 @@ function App() {
    };
 
    const changeTaskStatus = (taskId: string, taskStatus: boolean) => {
-	const newState = tasks.map(t => (t.id === taskId ? { ...t, isDone: taskStatus } : t))
-	setTasks(newState)
-	   };
+      const newState = tasks.map((t) => (t.id === taskId ? { ...t, isDone: taskStatus } : t));
+      setTasks(newState);
+   };
 
    return (
       <div className="App">
@@ -58,7 +62,7 @@ function App() {
             changeTaskStatus={changeTaskStatus}
             title={'what to learn'}
             tasks={tasksForTodolist}
-		  filter={filter}
+            filter={filter}
          />
       </div>
    );
