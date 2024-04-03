@@ -1,12 +1,12 @@
 type ButtonPropsType = {
    Btntitle: string;
-   onClick: () => void;
+   callback: () => void;
    className?: string;
 };
 
 export const Button = (props: ButtonPropsType) => {
    const handleButtonClick = () => {
-      props.onClick();
+      props.callback();
    };
 
    return (
