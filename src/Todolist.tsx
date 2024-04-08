@@ -40,9 +40,7 @@ export const Todolist = (props: TodolistType) => {
       //  event.key === 'Enter' && inputTitle && props.addTask(inputTitle);
    };
 
-   const changeFilterTasksHandler = (filter: FilterValuesType) => {
-      props.changeFilter(filter);
-   };
+   const changeFilterTasksHandler = (filter: FilterValuesType) => () => props.changeFilter(filter);
 
    return (
       <div>
@@ -94,17 +92,17 @@ export const Todolist = (props: TodolistType) => {
          <div>
             <Button
                className={props.filter === 'all' ? 'active-filter' : ''}
-               callback={() => changeFilterTasksHandler('all')}
+               callback={changeFilterTasksHandler('all')}
                Btntitle={'All'}
             />
             <Button
                className={props.filter === 'active' ? 'active-filter' : ''}
-               callback={() => changeFilterTasksHandler('active')}
+               callback={changeFilterTasksHandler('active')}
                Btntitle={'Active'}
             />
             <Button
                className={props.filter === 'completed' ? 'active-filter' : ''}
-               callback={() => changeFilterTasksHandler('completed')}
+               callback={changeFilterTasksHandler('completed')}
                Btntitle={'Completed'}
             />
          </div>
