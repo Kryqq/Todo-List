@@ -5,15 +5,17 @@ import { Input } from './Input';
 
 export type TaskType = {
    id: string;
+
    title: string;
    isDone: boolean;
 };
 export type TodolistType = {
    title: string;
    tasks: Array<TaskType>;
+   todolistId: string;
    filter: FilterValuesType;
    removeTask: (id: string) => void;
-   changeFilter: (value: FilterValuesType) => void;
+   changeFilter: (value: FilterValuesType, todolistId: string) => void;
    addTask: (title: string) => void;
    changeTaskStatus: (id: string, newStatusValue: boolean) => void;
 };
@@ -40,7 +42,7 @@ export const Todolist = (props: TodolistType) => {
       //  event.key === 'Enter' && inputTitle && props.addTask(inputTitle);
    };
 
-   const changeFilterTasksHandler = (filter: FilterValuesType) => () => props.changeFilter(filter);
+   const changeFilterTasksHandler = (filter: FilterValuesType) => () => props.changeFilter(filter, props.todolistId);
 
    return (
       <div>
@@ -52,12 +54,7 @@ export const Todolist = (props: TodolistType) => {
                onKeyUp={addTaskOnKeyUpHandler}
                setInputTitle={setInputTitle}
             />
-            {/* <input
-               className={error ? 'error' : ''}
-               onKeyUp={addTaskOnKeyUpHandler}
-               onChange={changeTaskTitleHandler}
-               value={taskTitle}
-            /> */}
+
             <Button callback={addTaskHandler} Btntitle={'+'} />
             {error && <div className="error-message">{error}</div>}
          </div>
