@@ -5,19 +5,19 @@ import { Input } from './Input';
 
 export type TaskType = {
    id: string;
-
    title: string;
    isDone: boolean;
 };
+
 export type TodolistType = {
    title: string;
    tasks: Array<TaskType>;
    todolistId: string;
    filter: FilterValuesType;
-   removeTask: (id: string) => void;
+   removeTask: (id: string, todolistId: string) => void;
    changeFilter: (value: FilterValuesType, todolistId: string) => void;
-   addTask: (title: string) => void;
-   changeTaskStatus: (id: string, newStatusValue: boolean) => void;
+   addTask: (title: string, todolistId: string) => void;
+   changeTaskStatus: (id: string, newStatusValue: boolean, todolistId: string) => void;
 };
 
 export const Todolist = (props: TodolistType) => {
@@ -26,7 +26,7 @@ export const Todolist = (props: TodolistType) => {
 
    const addTaskHandler = () => {
       if (inputTitle.trim() !== '') {
-         props.addTask(inputTitle.trim());
+         props.addTask(inputTitle.trim(), props.todolistId);
          setInputTitle('');
       } else {
          setError('Title is required');
@@ -74,12 +74,12 @@ export const Todolist = (props: TodolistType) => {
                   return (
                      <li key={task.id} className={task.isDone ? 'is-done' : ''}>
                         <input
-                           onChange={(e) => props.changeTaskStatus(task.id, e.currentTarget.checked)}
+                           onChange={(e) => props.changeTaskStatus(task.id, e.currentTarget.checked, props.todolistId)}
                            checked={task.isDone}
                            type="checkbox"
                         ></input>
                         <span>{task.title}</span>
-                        <Button callback={() => props.removeTask(task.id)} Btntitle={'X'}></Button>
+                        <Button callback={() => props.removeTask(task.id, props.todolistId)} Btntitle={'X'}></Button>
                      </li>
                   );
                })}
