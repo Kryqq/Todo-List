@@ -28,7 +28,6 @@ function App() {
    const todolistId1 = v1();
    const todolistId2 = v1();
 
-   const [tasks, setTasks] = React.useState<TaskType[]>(tasks1);
    const [todolists, setTodolists] = React.useState<TodolistsType[]>([
       { id: todolistId1, title: 'What to learn', filter: 'all' },
       { id: todolistId2, title: 'What to buy', filter: 'all' },
@@ -73,12 +72,19 @@ function App() {
    };
 
    const changeTaskStatus = (taskId: string, taskStatus: boolean, todolistId: string) => {
-    
       const tasksStatus = taskObj[todolistId].map((task) =>
          task.id === taskId ? { ...task, isDone: taskStatus } : task
       );
 
       setTasksObj({ ...taskObj, [todolistId]: tasksStatus });
+   };
+   const removeTodolist = (todolistId: string) => {
+      const newTodolists = todolists.filter((tl) => tl.id !== todolistId);
+      setTodolists(newTodolists);
+
+      delete taskObj[todolistId];
+
+      setTasksObj({ ...taskObj });
    };
 
    return (
@@ -95,14 +101,15 @@ function App() {
             return (
                <Todolist
                   key={tl.id}
-                  addTask={addTask}
-                  changeFilter={changeFilter}
-                  todolistId={tl.id}
-                  removeTask={removeTask}
-                  changeTaskStatus={changeTaskStatus}
                   title={tl.title}
-                  tasks={tasksForTodolist}
+                  todolistId={tl.id}
                   filter={tl.filter}
+                  tasks={tasksForTodolist}
+                  addTask={addTask}
+                  removeTask={removeTask}
+                  changeFilter={changeFilter}
+                  removeTodolist={removeTodolist}
+                  changeTaskStatus={changeTaskStatus}
                />
             );
          })}
