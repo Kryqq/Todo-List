@@ -1,7 +1,8 @@
-import React from 'react';
 import './App.css';
-import { TaskType, Todolist } from './Todolist';
+import React from 'react';
+import AddInputForm from './components/AddInputForm';
 import { v1 } from 'uuid';
+import { TaskType, Todolist } from './Todolist';
 
 const tasks1: TaskType[] = [
    { id: v1(), title: 'HTML&CSS', isDone: false },
@@ -81,14 +82,19 @@ function App() {
    const removeTodolist = (todolistId: string) => {
       const newTodolists = todolists.filter((tl) => tl.id !== todolistId);
       setTodolists(newTodolists);
-
       delete taskObj[todolistId];
-
       setTasksObj({ ...taskObj });
+   };
+   const addTodolist = (title: string) => {
+      const todolistId = v1();
+      const newTodolist: TodolistsType = { id: todolistId, title: title, filter: 'all' };
+      setTodolists([newTodolist, ...todolists]);
+      setTasksObj({ ...taskObj, [todolistId]: [] });
    };
 
    return (
       <div className="App">
+         <AddInputForm addItem={addTodolist} />
          {todolists.map((tl) => {
             let tasksForTodolist = taskObj[tl.id];
             if (tl.filter === 'active') {
