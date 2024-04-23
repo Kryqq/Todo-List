@@ -4,15 +4,6 @@ import AddInputForm from './components/AddInputForm';
 import { v1 } from 'uuid';
 import { TaskType, Todolist } from './Todolist';
 
-const tasks1: TaskType[] = [
-   { id: v1(), title: 'HTML&CSS', isDone: false },
-   { id: v1(), title: 'JS', isDone: false },
-   { id: v1(), title: 'ReactJS', isDone: false },
-   { id: v1(), title: 'Redux', isDone: false },
-   { id: v1(), title: 'Typescript', isDone: false },
-   { id: v1(), title: 'RTK query', isDone: false },
-];
-
 export type FilterValuesType = 'all' | 'active' | 'completed';
 
 export type TodolistsType = {
@@ -50,15 +41,11 @@ function App() {
    });
 
    const changeFilter = (value: FilterValuesType, todolistId: string) => {
-      const newTodolists = todolists.map((tl) => {
-         return tl.id === todolistId ? { ...tl, filter: value } : tl;
-      });
-      setTodolists(newTodolists);
+      setTodolists(todolists.map((tl) => (tl.id === todolistId ? { ...tl, filter: value } : tl)));
    };
 
    const removeTask = (id: string, todolistId: string) => {
-      const newTasks = taskObj[todolistId].filter((task) => task.id !== id);
-      setTasksObj({ ...taskObj, [todolistId]: newTasks });
+      setTasksObj({ ...taskObj, [todolistId]: taskObj[todolistId].filter((task) => task.id !== id) });
    };
 
    const addTask = (title: string, todolistId: string) => {
@@ -72,11 +59,10 @@ function App() {
    };
 
    const changeTaskStatus = (taskId: string, taskStatus: boolean, todolistId: string) => {
-      const tasksStatus = taskObj[todolistId].map((task) =>
-         task.id === taskId ? { ...task, isDone: taskStatus } : task
-      );
-
-      setTasksObj({ ...taskObj, [todolistId]: tasksStatus });
+      setTasksObj({
+         ...taskObj,
+         [todolistId]: taskObj[todolistId].map((task) => (task.id === taskId ? { ...task, isDone: taskStatus } : task)),
+      });
    };
    const removeTodolist = (todolistId: string) => {
       const newTodolists = todolists.filter((tl) => tl.id !== todolistId);
@@ -120,7 +106,6 @@ function App() {
                   changeFilter={changeFilter}
                   removeTodolist={removeTodolist}
                   changeTaskStatus={changeTaskStatus}
-                  
                />
             );
          })}
