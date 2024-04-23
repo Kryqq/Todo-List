@@ -1,7 +1,7 @@
 import React from 'react';
 import { FilterValuesType } from './App';
 import { Button } from './components/Button';
-import { Input } from './components/Input';
+
 import AddInputForm from './components/AddInputForm';
 
 export type TaskType = {
