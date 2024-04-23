@@ -1,7 +1,8 @@
 import React from 'react';
 import { FilterValuesType } from './App';
-import { Button } from './Button';
-import { Input } from './Input';
+import { Button } from './components/Button';
+import { Input } from './components/Input';
+import AddInputForm from './components/AddInputForm';
 
 export type TaskType = {
    id: string;
@@ -22,32 +23,15 @@ export type TodolistType = {
 };
 
 export const Todolist = (props: TodolistType) => {
-   const [error, setError] = React.useState<string | null>(null);
-   const [inputTitle, setInputTitle] = React.useState('');
-
-   const addTaskHandler = () => {
-      if (inputTitle.trim() !== '') {
-         props.addTask(inputTitle.trim(), props.todolistId);
-         setInputTitle('');
-      } else {
-         setError('Title is required');
-      }
-   };
-
-   const addTaskOnKeyUpHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-      setError(null);
-      if (event.key === 'Enter') {
-         addTaskHandler();
-      }
-
-      //  event.key === 'Enter' && inputTitle && props.addTask(inputTitle);
-   };
-
-   const changeFilterTasksHandler = (filter: FilterValuesType) => () => props.changeFilter(filter, props.todolistId);
-
    const removeTodolistHandler = () => {
       props.removeTodolist(props.todolistId);
    };
+
+   const addTaskHandler = (title: string) => {
+      props.addTask(title, props.todolistId);
+   };
+
+   const changeFilterTasksHandler = (filter: FilterValuesType) => () => props.changeFilter(filter, props.todolistId);
 
    return (
       <div>
@@ -56,15 +40,7 @@ export const Todolist = (props: TodolistType) => {
             <Button Btntitle={'x'} callback={removeTodolistHandler} />
          </div>
          <div>
-            <Input
-               inputTitle={inputTitle}
-               className={error ? 'error' : ''}
-               onKeyUp={addTaskOnKeyUpHandler}
-               setInputTitle={setInputTitle}
-            />
-
-            <Button callback={addTaskHandler} Btntitle={'+'} />
-            {error && <div className="error-message">{error}</div>}
+            <AddInputForm addItem={addTaskHandler} />
          </div>
          {props.tasks.length === 0 ? (
             <p>Тасок нет</p>
