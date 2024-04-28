@@ -3,6 +3,7 @@ import { FilterValuesType } from './App';
 import { Button } from './components/Button';
 
 import AddInputForm from './components/AddInputForm';
+import { EditableSpan } from './components/EditableSpan';
 
 export type TaskType = {
    id: string;
@@ -15,11 +16,13 @@ export type TodolistType = {
    tasks: Array<TaskType>;
    todolistId: string;
    filter: FilterValuesType;
-   removeTask: (id: string, todolistId: string) => void;
-   changeFilter: (value: FilterValuesType, todolistId: string) => void;
-   addTask: (title: string, todolistId: string) => void;
-   changeTaskStatus: (id: string, newStatusValue: boolean, todolistId: string) => void;
    removeTodolist: (todolistId: string) => void;
+   removeTask: (id: string, todolistId: string) => void;
+   addTask: (title: string, todolistId: string) => void;
+   changeTaskTitle: (todolistId: string, taskId: string, title: string) => void;
+   changeFilter: (value: FilterValuesType, todolistId: string) => void;
+   changeTaskStatus: (id: string, newStatusValue: boolean, todolistId: string) => void;
+   changeTodoTitle: (todolistId: string, title: string) => void;
 };
 
 export const Todolist = (props: TodolistType) => {
@@ -32,38 +35,52 @@ export const Todolist = (props: TodolistType) => {
    };
 
    const changeFilterTasksHandler = (filter: FilterValuesType) => () => props.changeFilter(filter, props.todolistId);
+   const changeTodoTitleHandler = (title: string) => {
+      props.changeTodoTitle(props.todolistId, title);
+   };
+
+   const changeTaskStatusHandler = (taskId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+      props.changeTaskStatus(taskId, e.currentTarget.checked, props.todolistId);
+   };
+   const removeTaskHandler = (taskId: string) => {
+      props.removeTask(taskId, props.todolistId);
+   };
+   const changeTaskTitleHandler = (title: string, taskId: string) => {
+      props.changeTaskTitle(props.todolistId, taskId, title);
+   };
+
+   let tasksForTodolist = props.tasks;
+   if (props.filter === 'active') {
+      tasksForTodolist = tasksForTodolist.filter((t) => !t.isDone);
+   }
+   if (props.filter === 'completed') {
+      tasksForTodolist = tasksForTodolist.filter((t) => t.isDone);
+   }
 
    return (
       <div>
          <div className={'todolist-title-container'}>
-            <h3>{props.title}</h3>
+            <EditableSpan onChange={changeTodoTitleHandler} title={props.title} />
             <Button Btntitle={'x'} callback={removeTodolistHandler} />
          </div>
          <div>
             <AddInputForm addItem={addTaskHandler} />
          </div>
-         {props.tasks.length === 0 ? (
+         {tasksForTodolist.length === 0 ? (
             <p>Тасок нет</p>
          ) : (
             <ul>
-               {props.tasks.map((task) => {
-                  // const removeTaskHandler = () => {
-                  // 	props.removeTaskHandler(task.id)
-                  // }
-                  //    const changeTaskStatusHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-                  // 	const newStatusValue = e.currentTarget.checked;
-                  // 	props.changeTaskStatus(task.id, newStatusValue)
-
-                  //   };
+               {tasksForTodolist.map((task) => {
+        
                   return (
                      <li key={task.id} className={task.isDone ? 'is-done' : ''}>
                         <input
-                           onChange={(e) => props.changeTaskStatus(task.id, e.currentTarget.checked, props.todolistId)}
+                           onChange={(e) => changeTaskStatusHandler(task.id, e)}
                            checked={task.isDone}
                            type="checkbox"
                         ></input>
-                        <span>{task.title}</span>
-                        <Button callback={() => props.removeTask(task.id, props.todolistId)} Btntitle={'X'}></Button>
+                        <EditableSpan onChange={() => changeTaskTitleHandler(task.title, task.id)} title={task.title} />
+                        <Button callback={() => removeTaskHandler(task.id)} Btntitle={'X'}></Button>
                      </li>
                   );
                })}
