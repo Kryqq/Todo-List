@@ -77,35 +77,35 @@ function App() {
       setTasksObj({ ...taskObj, [todolistId]: [] });
    };
 
-   const filterTasksForTodoList = (todolistId: string, filter: FilterValuesType) => {
-      let tasksForTodolist = taskObj[todolistId];
-      if (filter === 'active') {
-         tasksForTodolist = tasksForTodolist.filter((t) => !t.isDone);
-      }
-      if (filter === 'completed') {
-         tasksForTodolist = tasksForTodolist.filter((t) => t.isDone);
-      }
-      return tasksForTodolist;
+   const changeTaskTitle = (todolistId: string, taskId: string, title: string) => {
+      setTasksObj({
+         ...taskObj,
+         [todolistId]: taskObj[todolistId].map((task) => (task.id === taskId ? { ...task, title } : task)),
+      });
+   };
+
+   const changeTodoTitle = (todolistId: string, title: string) => {
+      setTodolists(todolists.map((tl) => (tl.id === todolistId ? { ...tl, title } : tl)));
    };
 
    return (
       <div className="App">
          <AddInputForm addItem={addTodolist} />
          {todolists.map((tl) => {
-            const tasksForTodolist = filterTasksForTodoList(tl.id, tl.filter);
-
             return (
                <Todolist
                   key={tl.id}
                   title={tl.title}
                   todolistId={tl.id}
                   filter={tl.filter}
-                  tasks={tasksForTodolist}
+                  tasks={taskObj[tl.id]}
                   addTask={addTask}
                   removeTask={removeTask}
                   changeFilter={changeFilter}
                   removeTodolist={removeTodolist}
                   changeTaskStatus={changeTaskStatus}
+                  changeTaskTitle={changeTaskTitle}
+                  changeTodoTitle={changeTodoTitle}
                />
             );
          })}
