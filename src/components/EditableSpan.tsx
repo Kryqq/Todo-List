@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from './Input';
+import { TextField } from '@mui/material';
 
 type EditableSpanPropsType = {
    title: string;
@@ -8,26 +8,22 @@ type EditableSpanPropsType = {
 
 export const EditableSpan = (props: EditableSpanPropsType) => {
    const [editMode, setEditmode] = React.useState<boolean>(false);
-   const [title, setTitle] = React.useState<string>('');
+   const [newTitle, setNewTitle] = React.useState<string>(props.title);
 
    const activateEditMode = () => {
-      setEditmode(true);
-      setTitle(props.title);
-   };
-   const activateViewMode = () => {
-      setEditmode(false);
-      props.onChange(title);
+      setEditmode(!editMode);
+      if (editMode) {
+         props.onChange(newTitle);
+      }
    };
 
+   const changeTitleHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setNewTitle(e.currentTarget.value);
+   };
    return (
       <>
          {editMode ? (
-            <input
-               value={title}
-               onBlur={activateViewMode}
-               autoFocus
-               onChange={(e) => setTitle(e.currentTarget.value)}
-            />
+            <TextField value={newTitle} onBlur={activateEditMode} autoFocus onChange={changeTitleHandler} />
          ) : (
             <span onDoubleClick={activateEditMode}> {props.title}</span>
          )}
