@@ -20,7 +20,7 @@ export type TodolistsType = {
    filter: FilterValuesType;
 };
 type ThemeMode = 'dark' | 'light';
-type TasksState = {
+export type TasksState = {
    [key: string]: TaskType[];
 };
 

@@ -1,19 +1,25 @@
 import React from 'react';
 import { Input } from './Input';
-import { Button } from './Button';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import { filterButtonsContainerSx } from '../Todolist.styles';
+// import { Button } from './Button';
 
 type AddInputFormType = {
    addItem: (title: string) => void;
 };
 
-const AddInputForm = (props: AddInputFormType) => {
+export const AddInputForm = (props: AddInputFormType) => {
    const [error, setError] = React.useState<string | null>(null);
-   const [inputTitle, setInputTitle] = React.useState('');
+   const [value, setValue] = React.useState('');
 
    const addItemHandler = () => {
-      if (inputTitle.trim() !== '') {
-         props.addItem(inputTitle.trim());
-         setInputTitle('');
+      if (value.trim() !== '') {
+         props.addItem(value.trim());
+         setValue('');
       } else {
          setError('Title is required');
       }
@@ -26,19 +32,34 @@ const AddInputForm = (props: AddInputFormType) => {
       }
    };
 
+   //    const buttonStyles= { maxWidth: '30px', maxHeight: '30px', minWidth: '30px', minHeight: '30px' };
+
    return (
-      <div>
-         <Input
+      <Box sx={filterButtonsContainerSx}>
+         <TextField
+            id="outlined-basic"
+            label="Enter new title"
+            variant="outlined"
+            value={value}
+            onKeyUp={addItemOnKeyUpHandler}
+            onChange={(e) => setValue(e.currentTarget.value)}
+            size="small"
+            error={!!error}
+            helperText={error}
+         />
+         {/* <Input
             inputTitle={inputTitle}
             className={error ? 'error' : ''}
             onKeyUp={addItemOnKeyUpHandler}
             setInputTitle={setInputTitle}
-         />
-         <Button callback={addItemHandler} Btntitle={'+'} />
-
-         {error && <div className="error-message">{error}</div>}
-      </div>
+         /> */}
+         {/* <Button callback={addItemHandler} Btntitle={'+'} /> */}
+         <IconButton onClick={addItemHandler} color={'primary'}>
+            <AddBoxIcon />
+         </IconButton>
+         {/* {error && <div className="error-message">{error}</div>} */}
+      </Box>
    );
 };
 
-export default AddInputForm;
+
