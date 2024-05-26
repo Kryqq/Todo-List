@@ -1,5 +1,6 @@
-import { TasksState, TodolistsType } from '../../App';
+import { TasksState } from '../../App';
 import { v1 } from 'uuid';
+import { AddTodolistActionType, RemoveTodolistActionType } from '../todolists-reducer/todolists-reducer';
 
 const todolistId1 = v1();
 const todolistId2 = v1();
@@ -19,21 +20,10 @@ const initialState: TasksState = {
    ],
 };
 
-type RemoveTaskActionType = {
-   type: 'REMOVE-TASK';
-   payload: {
-      taskId: string;
-      todolistId: string;
-   };
-};
+//без payload!!!
+type RemoveTaskActionType = ReturnType<typeof removeTaskAC>;
 
-type AddTaskActionType = {
-   type: 'ADD-TASK';
-   payload: {
-      newTitle: string;
-      todolistId: string;
-   };
-};
+export type AddTaskActionType = ReturnType<typeof addTaskAC>;
 
 type ChangeTaskStatusActionType = {
    type: 'CHANGE-TASK-STATUS';
@@ -53,7 +43,13 @@ type ChangeTaskTitleActionType = {
    };
 };
 
-type ActionsType = RemoveTaskActionType | AddTaskActionType | ChangeTaskStatusActionType | ChangeTaskTitleActionType;
+type ActionsType =
+   | RemoveTaskActionType
+   | AddTaskActionType
+   | ChangeTaskStatusActionType
+   | ChangeTaskTitleActionType
+   | AddTodolistActionType
+   | RemoveTodolistActionType;
 
 export const tasksReducer = (state: TasksState = initialState, action: ActionsType): TasksState => {
    switch (action.type) {
@@ -61,17 +57,15 @@ export const tasksReducer = (state: TasksState = initialState, action: ActionsTy
          return {
             ...state,
 
-            [action.payload.todolistId]: state[action.payload.todolistId].filter(
-               (task) => task.id !== action.payload.taskId
-            ),
+            [action.todolistId]: state[action.todolistId].filter((task) => task.id !== action.taskId),
          };
       }
       case 'ADD-TASK': {
          return {
             ...state,
             [action.payload.todolistId]: [
-               ...state[action.payload.todolistId],
                { id: v1(), title: action.payload.newTitle, isDone: false },
+               ...state[action.payload.todolistId],
             ],
          };
       }
@@ -92,6 +86,18 @@ export const tasksReducer = (state: TasksState = initialState, action: ActionsTy
             ),
          };
       }
+      case 'ADD-TODOLIST': {
+         return { ...state, [action.todolistId]: [] };
+      }
+      case 'REMOVE-TODOLIST': {
+      
+
+         const {
+            [action.payload.id]: [],...rest } = state;
+
+         return rest;
+      }
+
       default:
          throw new Error("I don't understand this type");
    }
@@ -99,17 +105,16 @@ export const tasksReducer = (state: TasksState = initialState, action: ActionsTy
 
 // removeTask, addTask, changeTaskStatus, changeTaskTitle,
 
-export const removeTaskAC = (taskId: string, todolistId: string): RemoveTaskActionType => {
+//без payload!!!
+export const removeTaskAC = (taskId: string, todolistId: string) => {
    return {
       type: 'REMOVE-TASK',
-      payload: {
-         taskId,
-         todolistId,
-      },
+      taskId,
+      todolistId,
    } as const;
 };
 
-export const addTaskAC = (newTitle: string, todolistId: string): AddTaskActionType => {
+export const addTaskAC = (newTitle: string, todolistId: string) => {
    return {
       type: 'ADD-TASK',
       payload: {
