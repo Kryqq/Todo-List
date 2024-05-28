@@ -8,6 +8,7 @@ type InputPropsType = {
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export const Input = (props: InputPropsType) => {
+	
    const inputOnKeyUpHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
       props.onKeyUp(event);
    };
