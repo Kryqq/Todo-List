@@ -1,9 +1,11 @@
 import { TasksState } from '../../App';
 import { v1 } from 'uuid';
-import { AddTodolistActionType, RemoveTodolistActionType } from '../todolists-reducer/todolists-reducer';
-
-const todolistId1 = v1();
-const todolistId2 = v1();
+import {
+   AddTodolistActionType,
+   RemoveTodolistActionType,
+   todolistId1,
+   todolistId2,
+} from '../todolists-reducer/todolists-reducer';
 
 const initialState: TasksState = {
    [todolistId1]: [
@@ -78,7 +80,7 @@ export const tasksReducer = (state: TasksState = initialState, action: ActionsTy
       }
 
       default:
-         throw new Error("I don't understand this type");
+         return state;
    }
 };
 
@@ -100,7 +102,7 @@ export const addTaskAC = (newTitle: string, todolistId: string) => {
       todolistId,
    } as const;
 };
-export const changeTaskStatusAC = (todolistId: string, taskId: string, newStatusValue: boolean) => {
+export const changeTaskStatusAC = (taskId: string, newStatusValue: boolean, todolistId: string) => {
    return { type: 'CHANGE-TASK-STATUS', todolistId, taskId, newStatusValue } as const;
 };
 
