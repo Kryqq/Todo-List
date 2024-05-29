@@ -49,7 +49,7 @@ test('correct task should be added', () => {
 });
 
 test('correct status of task should be changed', () => {
-   const endState = tasksReducer(startState, changeTaskStatusAC(todolistId2, startState[todolistId2][0].id, true));
+   const endState = tasksReducer(startState, changeTaskStatusAC(startState[todolistId2][0].id, true, todolistId2));
 
    expect(endState[todolistId2][0].isDone).toBe(true);
 });
