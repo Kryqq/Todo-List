@@ -47,6 +47,7 @@ export const Todolist = (props: TodolistType) => {
    };
 
    const changeTaskStatusHandler = (taskId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+
       props.changeTaskStatus(taskId, e.currentTarget.checked, props.todolistId);
    };
    const removeTaskHandler = (taskId: string) => {
