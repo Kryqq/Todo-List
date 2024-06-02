@@ -30,13 +30,13 @@ export type TodolistType = {
    todolist: TodolistsType;
 };
 
-export const TodolistWithRedux = (props: TodolistType) => {
+export const TodolistWithRedux = React.memo((props: TodolistType) => {
    let tasks = useSelector<AppRootStateType, TaskType[]>((state) => state.tasks[props.todolist.id]);
    const dispatch = useDispatch();
 
-   const removeTodolistHandler = () => {
+   const removeTodolistHandler = React.useCallback(() => {
       dispatch(removeTodolistAC(props.todolist.id));
-   };
+   }, [props.todolist.id]);
 
    const addTaskHandler = (title: string) => {
       dispatch(addTaskAC(title, props.todolist.id));
@@ -150,4 +150,4 @@ export const TodolistWithRedux = (props: TodolistType) => {
          </Box>
       </div>
    );
-};
+});
