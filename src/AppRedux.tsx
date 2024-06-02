@@ -57,12 +57,12 @@ export const AppRedux = () => {
    //    const changeTaskStatus = (taskId: string, taskStatus: boolean, todolistId: string) => {
    //       dispatch(changeTaskStatusAC(taskId, taskStatus, todolistId));
    //    };
-//    const removeTodolist = (todolistId: string) => {
-//       dispatch(removeTodolistAC(todolistId));
-//    };
-   const addTodolist = (title: string) => {
+   //    const removeTodolist = (todolistId: string) => {
+   //       dispatch(removeTodolistAC(todolistId));
+   //    };
+   const addTodolist = React.useCallback((title: string) => {
       dispatch(addTodolistAC(title));
-   };
+   }, []);
 
    //    const changeTaskTitle = (todolistId: string, taskId: string, title: string) => {
    //       dispatch(changeTaskTitleAC(todolistId, taskId, title));
@@ -71,9 +71,9 @@ export const AppRedux = () => {
    //    const changeTodoTitle = (todolistId: string, title: string) => {
    //       dispatch(changeTodolistTitleAC(todolistId, title));
    //    };
-   const changeModeHandler = () => {
+   const changeModeHandler = React.useCallback(() => {
       setThemeMode(themeMode == 'light' ? 'dark' : 'light');
-   };
+   }, []);
 
    const theme = createTheme({
       palette: {
