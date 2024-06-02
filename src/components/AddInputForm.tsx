@@ -12,7 +12,7 @@ type AddInputFormType = {
    addItem: (title: string) => void;
 };
 
-export const AddInputForm = (props: AddInputFormType) => {
+export const AddInputForm = React.memo((props: AddInputFormType) => {
    const [error, setError] = React.useState<string | null>(null);
    const [value, setValue] = React.useState('');
 
@@ -26,7 +26,10 @@ export const AddInputForm = (props: AddInputFormType) => {
    };
 
    const addItemOnKeyUpHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-      setError(null);
+      if (error !== null) {
+         setError(null);
+      }
+
       if (event.key === 'Enter') {
          addItemHandler();
       }
@@ -60,6 +63,4 @@ export const AddInputForm = (props: AddInputFormType) => {
          {/* {error && <div className="error-message">{error}</div>} */}
       </Box>
    );
-};
-
-
+});
