@@ -3,17 +3,17 @@ import { TextField } from '@mui/material';
 
 type EditableSpanPropsType = {
    title: string;
-   onChange: (title: string) => void;
+   onClick: (title: string) => void;
 };
 
-export const EditableSpan = (props: EditableSpanPropsType) => {
+export const EditableSpan = React.memo((props: EditableSpanPropsType) => {
    const [editMode, setEditmode] = React.useState<boolean>(false);
    const [newTitle, setNewTitle] = React.useState<string>(props.title);
-
+   console.log('editable span rendering');
    const activateEditMode = () => {
       setEditmode(!editMode);
       if (editMode) {
-         props.onChange(newTitle);
+         props.onClick(newTitle);
       }
    };
 
@@ -29,4 +29,4 @@ export const EditableSpan = (props: EditableSpanPropsType) => {
          )}
       </>
    );
-};
+});
