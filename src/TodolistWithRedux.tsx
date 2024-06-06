@@ -31,32 +31,51 @@ export type TodolistType = {
 };
 
 export const TodolistWithRedux = React.memo((props: TodolistType) => {
+	console.log('TodolistWithRedux render');
+	
    let tasks = useSelector<AppRootStateType, TaskType[]>((state) => state.tasks[props.todolist.id]);
    const dispatch = useDispatch();
 
    const removeTodolistHandler = React.useCallback(() => {
       dispatch(removeTodolistAC(props.todolist.id));
-   }, [props.todolist.id]);
+   }, [dispatch]);
 
-   const addTaskHandler = (title: string) => {
-      dispatch(addTaskAC(title, props.todolist.id));
-   };
+   const addTaskHandler = React.useCallback(
+      (title: string) => {
+         dispatch(addTaskAC(title, props.todolist.id));
+      },
+      [dispatch]
+   );
 
-   const changeFilterTasksHandler = (filter: FilterValuesType) => () =>
-      dispatch(changeTodolistFilterAC(props.todolist.id, filter));
-   const changeTodoTitleHandler = (title: string) => {
-      dispatch(changeTodolistTitleAC(props.todolist.id, title));
-   };
+   const changeFilterTasksHandler = React.useCallback(
+      (filter: FilterValuesType) => () => dispatch(changeTodolistFilterAC(props.todolist.id, filter)),
+      [dispatch]
+   );
+   const changeTodoTitleHandler = React.useCallback(
+      (title: string) => {
+         dispatch(changeTodolistTitleAC(props.todolist.id, title));
+      },
+      [dispatch]
+   );
 
-   const changeTaskStatusHandler = (taskId: string, e: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch(changeTaskStatusAC(taskId, e.currentTarget.checked, props.todolist.id));
-   };
-   const removeTaskHandler = (taskId: string) => {
-      dispatch(removeTaskAC(taskId, props.todolist.id));
-   };
-   const changeTaskTitleHandler = (title: string, taskId: string) => {
-      dispatch(changeTaskTitleAC(props.todolist.id, taskId, title));
-   };
+   const changeTaskStatusHandler = React.useCallback(
+      (taskId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+         dispatch(changeTaskStatusAC(taskId, e.currentTarget.checked, props.todolist.id));
+      },
+      [dispatch]
+   );
+   const removeTaskHandler = React.useCallback(
+      (taskId: string) => {
+         dispatch(removeTaskAC(taskId, props.todolist.id));
+      },
+      [dispatch]
+   );
+   const changeTaskTitleHandler = React.useCallback(
+      (title: string, taskId: string) => {
+         dispatch(changeTaskTitleAC(props.todolist.id, taskId, title));
+      },
+      [dispatch]
+   );
 
    if (props.todolist.filter === 'active') {
       tasks = tasks.filter((t) => !t.isDone);
