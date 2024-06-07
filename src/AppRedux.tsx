@@ -15,12 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppRootStateType } from './model/redux/store/store';
 import {
    addTodolistAC,
-   changeTodolistFilterAC,
-   changeTodolistTitleAC,
-   removeTodolistAC,
-   todolistId1,
+
 } from './model/todolists-reducer/todolists-reducer';
-import { addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC } from './model/tasks-reducer/tasks-reducer';
 import { TodolistWithRedux } from './TodolistWithRedux';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
@@ -42,24 +38,6 @@ export const AppRedux = () => {
 
    const [themeMode, setThemeMode] = React.useState<ThemeMode>('light');
 
-   //    const changeFilter = (value: FilterValuesType, todolistId: string) => {
-   //       dispatch(changeTodolistFilterAC(todolistId, value));
-   //    };
-
-   //    const removeTask = (id: string, todolistId: string) => {
-   //       dispatch(removeTaskAC(id, todolistId));
-   //    };
-
-   //    const addTask = (title: string, todolistId: string) => {
-   //       dispatch(addTaskAC(title, todolistId));
-   //    };
-
-   //    const changeTaskStatus = (taskId: string, taskStatus: boolean, todolistId: string) => {
-   //       dispatch(changeTaskStatusAC(taskId, taskStatus, todolistId));
-   //    };
-   //    const removeTodolist = (todolistId: string) => {
-   //       dispatch(removeTodolistAC(todolistId));
-   //    };
    const addTodolist = React.useCallback(
       (title: string) => {
          dispatch(addTodolistAC(title));
