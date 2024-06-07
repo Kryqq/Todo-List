@@ -9,7 +9,7 @@ type EditableSpanPropsType = {
 export const EditableSpan = React.memo((props: EditableSpanPropsType) => {
    const [editMode, setEditmode] = React.useState<boolean>(false);
    const [newTitle, setNewTitle] = React.useState<string>(props.title);
-   console.log('editable span rendering');
+
    const activateEditMode = () => {
       setEditmode(!editMode);
       if (editMode) {
