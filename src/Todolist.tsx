@@ -57,17 +57,25 @@ export const Todolist = (props: TodolistType) => {
    };
 
    let tasksForTodolist = props.tasks;
-   if (props.filter === 'active') {
-      tasksForTodolist = tasksForTodolist.filter((t) => !t.isDone);
-   }
-   if (props.filter === 'completed') {
-      tasksForTodolist = tasksForTodolist.filter((t) => t.isDone);
-   }
 
+   tasksForTodolist = React.useMemo(() => {
+
+      if (props.filter === 'active') {
+         tasksForTodolist = tasksForTodolist.filter((t) => !t.isDone);
+      }
+      if (props.filter === 'completed') {
+         tasksForTodolist = tasksForTodolist.filter((t) => t.isDone);
+      }
+
+      return tasksForTodolist;
+   }, [props.tasks, props.filter, ]);
+
+
+   
    return (
       <div>
          <div className={'todolist-title-container'}>
-            <EditableSpan onChange={changeTodoTitleHandler} title={props.title} />
+            <EditableSpan onClick={changeTodoTitleHandler} title={props.title} />
             {/* <Button Btntitle={'x'} callback={removeTodolistHandler} /> */}
             <IconButton aria-label="delete" onClick={removeTodolistHandler}>
                <DeleteIcon />
@@ -95,7 +103,7 @@ export const Todolist = (props: TodolistType) => {
                         <div>
                            <Checkbox onChange={(e) => changeTaskStatusHandler(task.id, e)} checked={task.isDone} />
                            <EditableSpan
-                              onChange={(title) => changeTaskTitleHandler(title, task.id)}
+                              onClick={(title) => changeTaskTitleHandler(title, task.id)}
                               title={task.title}
                            />
                         </div>
