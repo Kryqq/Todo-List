@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import { filterButtonsContainerSx } from '../Todolist.styles';
 // import { Button } from './Button';
 
-type AddInputFormType = {
+export type AddInputFormType = {
    addItem: (title: string) => void;
 };
 
