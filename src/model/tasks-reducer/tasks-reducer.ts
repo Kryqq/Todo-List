@@ -3,6 +3,7 @@ import { v1 } from 'uuid';
 import {
    AddTodolistActionType,
    RemoveTodolistActionType,
+   setTodolistsActionType,
    todolistId1,
    todolistId2,
 } from '../todolists-reducer/todolists-reducer';
@@ -33,7 +34,8 @@ type ActionsType =
    | ChangeTaskStatusActionType
    | ChangeTaskTitleActionType
    | AddTodolistActionType
-   | RemoveTodolistActionType;
+   | RemoveTodolistActionType
+   | setTodolistsActionType;
 
 export const tasksReducer = (state: TasksState = initialState, action: ActionsType): TasksState => {
    switch (action.type) {
@@ -79,6 +81,14 @@ export const tasksReducer = (state: TasksState = initialState, action: ActionsTy
          return rest;
       }
 
+      case 'SET-TODOLISTS': {
+         const stateCopy = { ...state };
+         action.todolists.forEach((tl) => {
+            stateCopy[tl.id] = [];
+         });
+         return stateCopy;
+      }
+
       default:
          return state;
    }
@@ -86,7 +96,6 @@ export const tasksReducer = (state: TasksState = initialState, action: ActionsTy
 
 // removeTask, addTask, changeTaskStatus, changeTaskTitle,
 
-//без payload!!!
 export const removeTaskAC = (taskId: string, todolistId: string) => {
    return {
       type: 'REMOVE-TASK',
