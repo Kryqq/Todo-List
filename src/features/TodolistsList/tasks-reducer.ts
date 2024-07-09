@@ -2,6 +2,9 @@ import {AddTodolistActionType, RemoveTodolistActionType, SetTodolistsActionType}
 import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../../api/todolists-api'
 import {Dispatch} from 'redux'
 import {AppRootStateType} from '../../app/store'
+import { setErrorAC, setErrorType, setLoadingAC, setLoadingType } from '../../app/app-reducer'
+import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils'
+import { AxiosError } from 'axios'
 
 const initialState: TasksStateType = {}
 
@@ -37,7 +40,11 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
     }
 }
 
-// actions
+enum STATUS_CODE {
+    SUCCESS = 0,
+    ERROR = 1
+}
+
 export const removeTaskAC = (taskId: string, todolistId: string) =>
     ({type: 'REMOVE-TASK', taskId, todolistId} as const)
 export const addTaskAC = (task: TaskType) =>
@@ -47,36 +54,47 @@ export const updateTaskAC = (taskId: string, model: UpdateDomainTaskModelType, t
 export const setTasksAC = (tasks: Array<TaskType>, todolistId: string) =>
     ({type: 'SET-TASKS', tasks, todolistId} as const)
 
-// thunks
+
 export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
-    todolistsAPI.getTasks(todolistId)
+	dispatch(setLoadingAC('loading'))
+	todolistsAPI.getTasks(todolistId)
         .then((res) => {
             const tasks = res.data.items
             const action = setTasksAC(tasks, todolistId)
             dispatch(action)
+		  dispatch(setLoadingAC('succeeded'))
         })
 }
 export const removeTaskTC = (taskId: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
+	dispatch(setLoadingAC('loading'))
     todolistsAPI.deleteTask(todolistId, taskId)
         .then(res => {
             const action = removeTaskAC(taskId, todolistId)
             dispatch(action)
+		  dispatch(setLoadingAC('succeeded'))
         })
 }
 export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
+	dispatch(setLoadingAC('loading'))
     todolistsAPI.createTask(todolistId, title)
         .then(res => {
-            const task = res.data.data.item
+            if (res.data.resultCode === STATUS_CODE.SUCCESS) {
+		  const task = res.data.data.item
             const action = addTaskAC(task)
             dispatch(action)
-        })
+		  dispatch(setLoadingAC('succeeded'))
+		  } else {
+			handleServerAppError(dispatch, res.data)
+		  }
+        }).catch((e)=> handleServerNetworkError(dispatch, e))
 }
 export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string) =>
     (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
+	dispatch(setLoadingAC('loading'))
         const state = getState()
         const task = state.tasks[todolistId].find(t => t.id === taskId)
         if (!task) {
-            //throw new Error("task not found in the state");
+   
             console.warn('task not found in the state')
             return
         }
@@ -95,10 +113,12 @@ export const updateTaskTC = (taskId: string, domainModel: UpdateDomainTaskModelT
             .then(res => {
                 const action = updateTaskAC(taskId, domainModel, todolistId)
                 dispatch(action)
-            })
+			 dispatch(setLoadingAC('succeeded'))
+            }).catch((e)=> handleServerNetworkError(dispatch, e))
     }
 
-// types
+
+
 export type UpdateDomainTaskModelType = {
     title?: string
     description?: string
@@ -118,3 +138,5 @@ type ActionsType =
     | RemoveTodolistActionType
     | SetTodolistsActionType
     | ReturnType<typeof setTasksAC>
+    | setLoadingType
+    | setErrorType
