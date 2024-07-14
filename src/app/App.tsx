@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
 import './App.css';
+import React from 'react';
+import { useAppDispatch, useAppSelector } from './store';
+import { Outlet } from 'react-router-dom';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,20 +11,28 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { Menu } from '@mui/icons-material';
 import LinearProgress from '@mui/material/LinearProgress/LinearProgress';
-import { useAppDispatch, useAppSelector } from './store';
-import { RequestStatusType } from './app-reducer';
 import CustomizedSnackbars from '../components/ErrorSnackbar/ErrorSnackbar';
-import { Outlet } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
+
+import { RequestStatusType } from './app-reducer';
 import { meTC } from '../features/Login/auth-reducer';
 
 function App() {
    const status = useAppSelector<RequestStatusType>((state) => state.app.status);
-
+   const isInitialized = useAppSelector<boolean>((state) => state.app.isInitialized);
    const dispatch = useAppDispatch();
 
-   useEffect(() => {
+   React.useEffect(() => {
       dispatch(meTC());
    }, []);
+
+   if (!isInitialized) {
+      return (
+         <div style={{ position: 'fixed', top: '30%', textAlign: 'center', width: '100%' }}>
+            <CircularProgress />
+         </div>
+      );
+   }
 
    return (
       <div className="App">
