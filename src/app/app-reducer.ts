@@ -32,7 +32,7 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
 		...state,
 		error: action.error 
 		}
-		case 'login/SET-IS-INITIALIZED': {
+		case 'APP/SET-IS-INITIALIZED': {
 			return { ...state, isInitialized: action.isInitialized }
 		   }		
     default:
@@ -46,7 +46,7 @@ export type setErrorType = ReturnType<typeof setErrorAC>
 export type setIsInitializedType = ReturnType<typeof setIsInitializedAC>
 export const setLoadingAC = (status: RequestStatusType) =>({ type: 'APP/SET-STATUS', status } as const)
 export const setErrorAC = (error: string | null) =>({ type: 'APP/SET-ERROR', error } as const)
-export const setIsInitializedAC = (isInitialized: boolean) => ({ type: 'login/SET-IS-INITIALIZED', isInitialized }) as const
+export const setIsInitializedAC = (isInitialized: boolean) => ({ type: 'APP/SET-IS-INITIALIZED', isInitialized }) as const
 type ActionsType = setLoadingType | setErrorType | setIsInitializedType
 
  
