@@ -11,6 +11,7 @@ export type RequestStatusType =
 
 
 const initialState = {
+  isInitialized: false,
   status: 'loading' as RequestStatusType,
   error: null as null | string
 }
@@ -30,7 +31,10 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
       return { 
 		...state,
 		error: action.error 
-		}		
+		}
+		case 'login/SET-IS-INITIALIZED': {
+			return { ...state, isInitialized: action.isInitialized }
+		   }		
     default:
       return state
   }
@@ -39,10 +43,11 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
 
 export type setLoadingType = ReturnType<typeof setLoadingAC>
 export type setErrorType = ReturnType<typeof setErrorAC>
+export type setIsInitializedType = ReturnType<typeof setIsInitializedAC>
 export const setLoadingAC = (status: RequestStatusType) =>({ type: 'APP/SET-STATUS', status } as const)
 export const setErrorAC = (error: string | null) =>({ type: 'APP/SET-ERROR', error } as const)
-
-type ActionsType = setLoadingType | setErrorType
+export const setIsInitializedAC = (isInitialized: boolean) => ({ type: 'login/SET-IS-INITIALIZED', isInitialized }) as const
+type ActionsType = setLoadingType | setErrorType | setIsInitializedType
 
  
 
