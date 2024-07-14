@@ -1,10 +1,11 @@
 import { Dispatch } from 'redux'
-import { setErrorType, setLoadingAC, setLoadingType } from '../../app/app-reducer'
+import { setErrorType, setIsInitializedAC, setIsInitializedType, setLoadingAC, setLoadingType } from '../../app/app-reducer'
 import { authAPI } from '../../api/todolists-api'
 import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils'
 import { LoginPropsType } from './Login'
 
 const initialState = {
+
   isLoggedIn: false,
 }
 type InitialStateType = typeof initialState
@@ -16,6 +17,9 @@ export const authReducer = (
   switch (action.type) {
     case 'login/SET-IS-LOGGED-IN':
       return { ...state, isLoggedIn: action.value }
+
+  
+	
     default:
       return state
   }
@@ -23,7 +27,8 @@ export const authReducer = (
 // actions
 export const setIsLoggedInAC = (value: boolean) =>
   ({ type: 'login/SET-IS-LOGGED-IN', value }) as const
- 
+
+
 // thunks
 export const loginTC = (data: LoginPropsType) => (dispatch: Dispatch<ActionsType>) => {
   dispatch(setLoadingAC('loading'))
@@ -32,12 +37,9 @@ export const loginTC = (data: LoginPropsType) => (dispatch: Dispatch<ActionsType
 	if (res.data.resultCode ===  0) {
 			dispatch(setIsLoggedInAC(true))
 			dispatch(setLoadingAC('succeeded'))
-
 	} else {
 		handleServerAppError(dispatch, res.data )
 	}
-
-
   }).catch((e)=> handleServerNetworkError(dispatch, e))
 }
 
@@ -46,21 +48,24 @@ export const loginTC = (data: LoginPropsType) => (dispatch: Dispatch<ActionsType
 export const meTC = () => (dispatch: Dispatch<ActionsType>) => {
 	dispatch(setLoadingAC('loading'))
 	authAPI.me().then((res)=>{
-   
-	   if (res.data.resultCode ===  0) {
+   	   if (res.data.resultCode ===  0) {
 			   dispatch(setIsLoggedInAC(true))
 			   dispatch(setLoadingAC('succeeded'))
-   
+			   dispatch(setIsInitializedAC(true))
 	   } else {
 		   handleServerAppError(dispatch, res.data )
 	   }
    
    
-	}).catch((e)=> handleServerNetworkError(dispatch, e))
+	}).catch((e)=> handleServerNetworkError(dispatch, e)).finally(()=>{
+		dispatch(setIsInitializedAC(true))
+	})
+	  
    }
  
 // types
 type ActionsType =
   | ReturnType<typeof setIsLoggedInAC>
+  | setIsInitializedType
   | setLoadingType
   | setErrorType
