@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
-import { TodolistsList } from '../features/TodolistsList/TodolistsList';
 
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,12 +9,21 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { Menu } from '@mui/icons-material';
 import LinearProgress from '@mui/material/LinearProgress/LinearProgress';
-import { useAppSelector } from './store';
+import { useAppDispatch, useAppSelector } from './store';
 import { RequestStatusType } from './app-reducer';
 import CustomizedSnackbars from '../components/ErrorSnackbar/ErrorSnackbar';
+import { Outlet } from 'react-router-dom';
+import { meTC } from '../features/Login/auth-reducer';
 
 function App() {
    const status = useAppSelector<RequestStatusType>((state) => state.app.status);
+
+   const dispatch = useAppDispatch();
+
+   useEffect(() => {
+      dispatch(meTC());
+   }, []);
+
    return (
       <div className="App">
          <AppBar position="static">
@@ -30,7 +38,7 @@ function App() {
             {status === 'loading' && <LinearProgress color="secondary" />}
          </AppBar>
          <Container fixed>
-            <TodolistsList />
+            <Outlet />
          </Container>
       </div>
    );
