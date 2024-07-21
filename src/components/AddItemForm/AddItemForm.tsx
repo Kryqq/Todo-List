@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent } from 'react';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import { AddBox } from '@mui/icons-material';
@@ -11,8 +11,8 @@ type AddItemFormPropsType = {
 export const AddItemForm = React.memo(function (props: AddItemFormPropsType) {
 
 
-   let [title, setTitle] = useState('');
-   let [error, setError] = useState<string | null>(null);
+   let [title, setTitle] = React.useState('');
+   let [error, setError] = React.useState<string | null>(null);
 
    const addItem = () => {
       if (title.trim() !== '') {
@@ -43,7 +43,7 @@ export const AddItemForm = React.memo(function (props: AddItemFormPropsType) {
             error={!!error}
             value={title}
             onChange={onChangeHandler}
-            onKeyPress={onKeyPressHandler}
+            onKeyDown={onKeyPressHandler}
             label="Title"
             helperText={error}
             disabled={props.disabled}
