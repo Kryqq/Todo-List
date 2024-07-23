@@ -1,12 +1,12 @@
-import React from "react";
-import "./App.css";
-import { TodolistsList } from "../features/TodolistsList/TodolistsList";
-import { useDispatch, useSelector } from "react-redux";
-import { AppRootStateType } from "./store";
-import { initializeAppTC, RequestStatusType } from "./app-reducer";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Login } from "../features/Login/Login";
-import { logoutTC } from "../features/Login/auth-reducer";
+import React from 'react'
+import './App.css'
+import { TodolistsList } from '../features/TodolistsList/TodolistsList'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppRootStateType } from './store'
+import { initializeAppTC, RequestStatusType } from './app-reducer'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Login } from '../features/Login/Login'
+import { logoutTC } from '../features/Login/auth-reducer'
 import {
   AppBar,
   Button,
@@ -16,34 +16,34 @@ import {
   LinearProgress,
   Toolbar,
   Typography,
-} from "@mui/material";
-import { Menu } from "@mui/icons-material";
-import { ErrorSnackbar } from "components/ErrorSnackbar/ErrorSnackbar";
+} from '@mui/material'
+import { Menu } from '@mui/icons-material'
+import { ErrorSnackbar } from 'components/ErrorSnackbar/ErrorSnackbar'
 
 type PropsType = {
-  demo?: boolean;
-};
+  demo?: boolean
+}
 
 const App = ({ demo = false }: PropsType) => {
-  const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status);
-  const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized);
-  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn);
-  const dispatch = useDispatch<any>();
+  const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
+  const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized)
+  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
+  const dispatch = useDispatch<any>()
 
   React.useEffect(() => {
-    dispatch(initializeAppTC());
-  }, []);
+    dispatch(initializeAppTC())
+  }, [])
 
   const logoutHandler = React.useCallback(() => {
-    dispatch(logoutTC());
-  }, []);
+    dispatch(logoutTC())
+  }, [])
 
   if (!isInitialized) {
     return (
-      <div style={{ position: "fixed", top: "30%", textAlign: "center", width: "100%" }}>
+      <div style={{ position: 'fixed', top: '30%', textAlign: 'center', width: '100%' }}>
         <CircularProgress />
       </div>
-    );
+    )
   }
 
   return (
@@ -62,17 +62,17 @@ const App = ({ demo = false }: PropsType) => {
               </Button>
             )}
           </Toolbar>
-          {status === "loading" && <LinearProgress />}
+          {status === 'loading' && <LinearProgress />}
         </AppBar>
         <Container fixed>
           <Routes>
-            <Route path={"/"} element={<TodolistsList demo={demo} />} />
-            <Route path={"/login"} element={<Login />} />
+            <Route path={'/'} element={<TodolistsList demo={demo} />} />
+            <Route path={'/login'} element={<Login />} />
           </Routes>
         </Container>
       </div>
     </BrowserRouter>
-  );
-};
+  )
+}
 
-export default App;
+export default App
