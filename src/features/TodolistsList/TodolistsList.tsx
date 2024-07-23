@@ -1,17 +1,17 @@
 import React from 'react'
 import {
   addTodolistTC,
-  changeTodolistFilterAC,
+  changeTodolistFilter,
   changeTodolistTitleTC,
   fetchTodolistsTC,
   FilterValuesType,
   removeTodolistTC,
   TodolistDomainType,
-} from './todolists-reducer'
+} from './todolistsSlice'
 import { useAppDispatch } from 'hooks/useAppDispatch'
 import { useSelector } from 'react-redux'
 import { AppRootStateType } from 'app/store'
-import { addTaskTC, removeTaskTC, TasksStateType, updateTaskTC } from './tasks-reducer'
+import { addTaskTC, removeTaskTC, TasksStateType, updateTaskTC } from './tasksSlice'
 import { TaskStatuses } from 'api/todolists-api'
 import { Navigate } from 'react-router-dom'
 import Grid from '@mui/material/Grid/Grid'
@@ -59,7 +59,7 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
   }, [])
 
   const changeFilter = React.useCallback(function (value: FilterValuesType, todolistId: string) {
-    const action = changeTodolistFilterAC(todolistId, value)
+    const action = changeTodolistFilter({ id: todolistId, filter: value })
     dispatch(action)
   }, [])
 
