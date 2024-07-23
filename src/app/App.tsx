@@ -1,12 +1,12 @@
 import React from 'react'
 import './App.css'
-import { TodolistsList } from '../features/TodolistsList/TodolistsList'
+import { TodolistsList } from 'features/TodolistsList/TodolistsList'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppRootStateType } from './store'
-import { initializeAppTC, RequestStatusType } from './app-reducer'
+import { initializeAppTC, RequestStatusType } from './appSlice'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Login } from '../features/Login/Login'
-import { logoutTC } from '../features/Login/auth-reducer'
+import { logoutTC } from '../features/Login/authSlice'
 import {
   AppBar,
   Button,
