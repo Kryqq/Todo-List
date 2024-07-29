@@ -11,7 +11,7 @@ import {
 import { useAppDispatch } from 'hooks/useAppDispatch'
 import { useSelector } from 'react-redux'
 import { AppRootStateType } from 'app/store'
-import { addTaskTC, removeTaskTC, TasksStateType, updateTaskTC } from './tasksSlice'
+import { addTask, removeTaskTC, TasksStateType, updateTask } from './tasksSlice'
 import { TaskStatuses } from 'api/todolists-api'
 import { Navigate } from 'react-router-dom'
 import Grid from '@mui/material/Grid/Grid'
@@ -43,19 +43,17 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     dispatch(thunk)
   }, [])
 
-  const addTask = React.useCallback(function (title: string, todolistId: string) {
-    const thunk = addTaskTC(title, todolistId)
+  const addTaskHandler = React.useCallback(function (title: string, todolistId: string) {
+    const thunk = addTask({ title, todolistId })
     dispatch(thunk)
   }, [])
 
-  const changeStatus = React.useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
-    const thunk = updateTaskTC(id, { status }, todolistId)
-    dispatch(thunk)
+  const changeStatus = React.useCallback(function (taskId: string, status: TaskStatuses, todolistId: string) {
+    dispatch(updateTask({ taskId, model: { status }, todolistId }))
   }, [])
 
-  const changeTaskTitle = React.useCallback(function (id: string, newTitle: string, todolistId: string) {
-    const thunk = updateTaskTC(id, { title: newTitle }, todolistId)
-    dispatch(thunk)
+  const changeTaskTitle = React.useCallback(function (taskId: string, title: string, todolistId: string) {
+    dispatch(updateTask({ taskId, model: { title }, todolistId }))
   }, [])
 
   const changeFilter = React.useCallback(function (value: FilterValuesType, todolistId: string) {
@@ -102,7 +100,7 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
                   tasks={allTodolistTasks}
                   removeTask={removeTask}
                   changeFilter={changeFilter}
-                  addTask={addTask}
+                  addTaskHandler={addTaskHandler}
                   changeTaskStatus={changeStatus}
                   removeTodolist={removeTodolist}
                   changeTaskTitle={changeTaskTitle}
