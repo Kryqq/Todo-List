@@ -1,12 +1,9 @@
 import { Dispatch } from 'redux'
-
 import { ResponseType } from '../api/todolists-api'
 import { setAppError, setAppStatus } from 'app/appSlice'
 
-export const handleServerNetworkError = (dispatch: Dispatch, error: { message: string }) => {
-  dispatch(setAppError({ error: error.message }))
-  dispatch(setAppStatus({ status: 'failed' }))
-}
+
+
 
 export const handleServerAppError = <T>(dispatch: Dispatch, data: ResponseType<T>) => {
   if (data.messages.length) {
