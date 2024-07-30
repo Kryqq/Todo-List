@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppRootStateType } from './store'
 import { initializeAppTC, RequestStatusType } from './appSlice'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Login } from '../features/Login/Login'
-import { logoutTC } from '../features/Login/authSlice'
+ 
+import { logoutTC } from '../features/auth/model/authSlice'
 import {
   AppBar,
   Button,
@@ -19,6 +19,7 @@ import {
 } from '@mui/material'
 import { Menu } from '@mui/icons-material'
 import { ErrorSnackbar } from 'components/ErrorSnackbar/ErrorSnackbar'
+import { Login } from 'features/auth/login/Login'
 
 type PropsType = {
   demo?: boolean

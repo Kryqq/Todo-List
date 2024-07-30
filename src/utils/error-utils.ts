@@ -1,11 +1,12 @@
 import { Dispatch } from 'redux'
-import { ResponseType } from '../api/todolists-api'
+ 
 import { setAppError, setAppStatus } from 'app/appSlice'
+import { BaseResponse } from 'common/types/types'
 
 
 
 
-export const handleServerAppError = <T>(dispatch: Dispatch, data: ResponseType<T>) => {
+export const handleServerAppError = <T>(dispatch: Dispatch, data: BaseResponse<T>) => {
   if (data.messages.length) {
     dispatch(setAppError({ error: data.messages[0] }))
   } else {
