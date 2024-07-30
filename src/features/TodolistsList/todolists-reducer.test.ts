@@ -1,4 +1,4 @@
-import { todo } from 'node:test'
+ 
 import {
   addTodolist,
   changeTodolistEntityStatus,
@@ -11,7 +11,7 @@ import {
   todolistsReducer,
 } from './todolistsSlice'
 import { v1 } from 'uuid'
-import { TodolistType } from '../../api/todolists-api'
+import { TodolistType } from './todolists-api'
 import { RequestStatusType } from 'app/appSlice'
 
 let todolistId1: string

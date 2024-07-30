@@ -1,9 +1,10 @@
-import { todolistsAPI, TodolistType } from 'api/todolists-api'
+
 import { RequestStatusType, setAppStatus } from 'app/appSlice'
 
 import { AppThunk } from 'app/store'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { handleServerNetworkError } from 'utils/handleServerNetworkError'
+import { todolistsAPI, TodolistType } from './todolists-api'
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 export type TodolistDomainType = TodolistType & {

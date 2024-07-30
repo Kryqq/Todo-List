@@ -2,12 +2,14 @@ import React from 'react'
 import { AddItemForm } from 'components/AddItemForm/AddItemForm'
 import { EditableSpan } from 'components/EditableSpan/EditableSpan'
 import { Task } from './Task/Task'
-import { TaskStatuses, TaskType } from 'api/todolists-api'
+
 import { FilterValuesType, TodolistDomainType } from '../todolistsSlice'
 import { fetchTasks} from '../tasksSlice'
 import { Button, IconButton } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { useAppDispatch } from 'hooks/useAppDispatch'
+import { TaskStatuses } from 'common/types/enums/enums'
+import { TaskType } from '../todolists-api'
 
 type PropsType = {
   todolist: TodolistDomainType
