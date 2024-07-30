@@ -1,12 +1,11 @@
-import { Dispatch } from 'redux'
-
-import { authAPI, LoginParamsType } from 'api/todolists-api'
 import { handleServerAppError } from 'utils/error-utils'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppThunk } from 'app/store'
 import { setAppStatus } from 'app/appSlice'
 import { clearLogoutData } from 'features/TodolistsList/todolistsSlice'
 import { handleServerNetworkError } from 'utils/handleServerNetworkError'
+import { LoginParamsType } from '../api/authAPI.types'
+import { authAPI } from '../api/authAPI'
 
 const initialState: InitialStateType = {
   isLoggedIn: false,
