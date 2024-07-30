@@ -11,13 +11,13 @@ import {
 import { useAppDispatch } from 'hooks/useAppDispatch'
 import { useSelector } from 'react-redux'
 import { AppRootStateType } from 'app/store'
-import { addTask, removeTaskTC, TasksStateType, updateTask } from './tasksSlice'
-import { TaskStatuses } from 'api/todolists-api'
+import { addTask, removeTask, TasksStateType, updateTask } from './tasksSlice'
 import { Navigate } from 'react-router-dom'
 import Grid from '@mui/material/Grid/Grid'
 import { AddItemForm } from 'components/AddItemForm/AddItemForm'
 import Paper from '@mui/material/Paper/Paper'
 import { Todolist } from './Todolist/Todolist'
+import { TaskStatuses } from 'common/types/enums/enums'
 
 type PropsType = {
   demo?: boolean
@@ -38,9 +38,8 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     dispatch(thunk)
   }, [])
 
-  const removeTask = React.useCallback(function (id: string, todolistId: string) {
-    const thunk = removeTaskTC(id, todolistId)
-    dispatch(thunk)
+  const removeTaskHandler = React.useCallback(function (id: string, todolistId: string) {
+    dispatch(removeTask({ taskId: id, todolistId }))
   }, [])
 
   const addTaskHandler = React.useCallback(function (title: string, todolistId: string) {
@@ -98,7 +97,7 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
                 <Todolist
                   todolist={tl}
                   tasks={allTodolistTasks}
-                  removeTask={removeTask}
+                  removeTaskHandler={removeTaskHandler}
                   changeFilter={changeFilter}
                   addTaskHandler={addTaskHandler}
                   changeTaskStatus={changeStatus}

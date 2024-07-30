@@ -87,7 +87,15 @@ beforeEach(() => {
 })
 
 test('correct task should be deleted from correct array', () => {
-  const action = removeTask({ taskId: '2', todolistId: 'todolistId2' })
+  type Action = TestAction<typeof removeTask.fulfilled>
+
+  const action: Action = {
+    type: removeTask.fulfilled.type,
+    payload: {
+      taskId: '2',
+      todolistId: 'todolistId2',
+    },
+  }
 
   const endState = tasksReducer(startState, action)
 
@@ -178,7 +186,21 @@ test('title of specified task should be changed', () => {
 })
 
 test('new array should be added when new todolist is added', () => {
-  const action = addTodolist({ todolist: { id: 'blablas', title: 'new todolist', order: 0, addedDate: '' } })
+type Action = TestAction<typeof addTodolist.fulfilled>
+
+  const action: Action = {
+    type: addTodolist.fulfilled.type,
+    payload: {
+	 todolist: {
+	   id: 'blablas',
+	   title: 'new todolist',
+	   order: 0,
+	   addedDate: '',
+	 },
+    },
+  }
+
+//   const action = addTodolist({ todolist: { id: 'blablas', title: 'new todolist', order: 0, addedDate: '' } })
 
   const endState = tasksReducer(startState, action)
 

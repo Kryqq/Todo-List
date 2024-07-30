@@ -1,4 +1,3 @@
- 
 import {
   addTodolist,
   changeTodolistEntityStatus,
@@ -13,6 +12,7 @@ import {
 import { v1 } from 'uuid'
 import { TodolistType } from './todolists-api'
 import { RequestStatusType } from 'app/appSlice'
+import { TestAction } from 'common/types/types'
 
 let todolistId1: string
 let todolistId2: string
@@ -35,17 +35,24 @@ test('correct todolist should be removed', () => {
 })
 
 test('correct todolist should be added', () => {
-  let todolist: TodolistType = {
-    title: 'New Todolist',
-    id: 'any id',
-    addedDate: '',
-    order: 0,
+  type Action = TestAction<typeof addTodolist.fulfilled>
+
+  const action: Action = {
+    type: addTodolist.fulfilled.type,
+    payload: {
+      todolist: {
+        id: 'any id',
+        title: 'New Todolist',
+        order: 0,
+        addedDate: '',
+      },
+    },
   }
 
-  const endState = todolistsReducer(startState, addTodolist({ todolist: todolist }))
+  const endState = todolistsReducer(startState, action)
 
   expect(endState.length).toBe(3)
-  expect(endState[0].title).toBe(todolist.title)
+  expect(endState[0].title).toBe(action.payload.todolist.title)
   expect(endState[0].filter).toBe('all')
 })
 
