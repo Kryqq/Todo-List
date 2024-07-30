@@ -1,12 +1,5 @@
 import { addTodolist, clearLogoutData, removeTodolist, setTodolists } from './todolistsSlice'
-import {
-  ResultCode,
-  TaskPriorities,
-  TaskStatuses,
-  TaskType,
-  todolistsAPI,
-  UpdateTaskModelType,
-} from 'api/todolists-api'
+
 import { Dispatch } from 'redux'
 import { AppDispatch, AppRootStateType, AppThunk } from 'app/store'
 import { setAppStatus } from 'app/appSlice'
@@ -14,6 +7,8 @@ import { handleServerAppError } from 'utils/error-utils'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { createAppAsyncThunk } from 'utils/createAsyncThunk'
 import { handleServerNetworkError } from 'utils/handleServerNetworkError'
+import { TaskType, todolistsAPI, UpdateTaskModelType } from './todolists-api'
+import { ResultCode, TaskPriorities, TaskStatuses } from 'common/types/enums/enums'
 
 const initialState: TasksStateType = {}
 

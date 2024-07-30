@@ -1,9 +1,8 @@
-import { Action } from '@remix-run/router'
 import { addTask, removeTask, fetchTasks, tasksReducer, TasksStateType, updateTask } from './tasksSlice'
-
 import { addTodolist, removeTodolist, setTodolists } from './todolistsSlice'
-import { TaskPriorities, TaskStatuses, TaskType, TodolistType } from 'api/todolists-api'
-import { TestAction } from 'common/types/TestAction'
+import { TaskPriorities, TaskStatuses } from 'common/types/enums/enums'
+import { TestAction } from 'common/types/types'
+import { TodolistType } from './todolists-api'
 
 let startState: TasksStateType = {}
 beforeEach(() => {
@@ -169,7 +168,7 @@ test('title of specified task should be changed', () => {
     },
   }
 
-//   const _action = updateTask({ taskId: '2', model: { title: 'yogurt' }, todolistId: 'todolistId2' })
+  //   const _action = updateTask({ taskId: '2', model: { title: 'yogurt' }, todolistId: 'todolistId2' })
 
   const endState = tasksReducer(startState, action)
 
