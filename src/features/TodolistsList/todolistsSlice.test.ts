@@ -10,7 +10,7 @@ import {
   todolistsReducer,
 } from './todolistsSlice'
 import { v1 } from 'uuid'
-import { TodolistType } from './todolists-api'
+
 import { RequestStatusType } from 'app/appSlice'
 import { TestAction } from 'common/types/types'
 
@@ -28,7 +28,15 @@ beforeEach(() => {
 })
 
 test('correct todolist should be removed', () => {
-  const endState = todolistsReducer(startState, removeTodolist({ id: todolistId1 }))
+  type Action = TestAction<typeof removeTodolist.fulfilled>
+
+  const action: Action = {
+    type: removeTodolist.fulfilled.type,
+    payload: {
+      id: todolistId1,
+    },
+  }
+  const endState = todolistsReducer(startState, action)
 
   expect(endState.length).toBe(1)
   expect(endState[0].id).toBe(todolistId2)
@@ -57,9 +65,19 @@ test('correct todolist should be added', () => {
 })
 
 test('correct todolist should change its name', () => {
+  type Action = TestAction<typeof changeTodolistTitle.fulfilled>
+
+  const action: Action = {
+    type: changeTodolistTitle.fulfilled.type,
+    payload: {
+      id: todolistId2,
+      title: 'New Todolist',
+    },
+  }
+
   let newTodolistTitle = 'New Todolist'
 
-  const action = changeTodolistTitle({ id: todolistId2, title: newTodolistTitle })
+  //   const action = changeTodolistTitle({ id: todolistId2, title: newTodolistTitle })
 
   const endState = todolistsReducer(startState, action)
 
