@@ -19,7 +19,7 @@ type PropsType = {
   changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
   changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
   removeTaskHandler: (taskId: string, todolistId: string) => void
-  removeTodolist: (id: string) => void
+  removeTodolistHandler: (id: string) => void
   changeTodolistTitle: (id: string, newTitle: string) => void
   demo?: boolean
 }
@@ -43,7 +43,7 @@ export const Todolist = React.memo(function ({ demo = false, ...props }: PropsTy
   )
 
   const removeTodolist = () => {
-    props.removeTodolist(props.todolist.id)
+    props.removeTodolistHandler(props.todolist.id)
   }
   const changeTodolistTitle = React.useCallback(
     (title: string) => {
