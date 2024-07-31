@@ -1,11 +1,11 @@
 import React from 'react'
 import {
-  addTodolistTC,
+  addTodolist,
   changeTodolistFilter,
-  changeTodolistTitleTC,
-  fetchTodolistsTC,
+  changeTodolistTitle,
+  fetchTodolists,
   FilterValuesType,
-  removeTodolistTC,
+  removeTodolist,
   TodolistDomainType,
 } from './todolistsSlice'
 import { useAppDispatch } from 'hooks/useAppDispatch'
@@ -34,15 +34,19 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     if (demo || !isLoggedIn) {
       return
     }
-    const thunk = fetchTodolistsTC()
+    const thunk = fetchTodolists()
     dispatch(thunk)
   }, [])
 
   const removeTaskHandler = React.useCallback(function (id: string, todolistId: string) {
+	 
+	
     dispatch(removeTask({ taskId: id, todolistId }))
   }, [])
 
   const addTaskHandler = React.useCallback(function (title: string, todolistId: string) {
+
+	
     const thunk = addTask({ title, todolistId })
     dispatch(thunk)
   }, [])
@@ -60,19 +64,19 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     dispatch(action)
   }, [])
 
-  const removeTodolist = React.useCallback(function (id: string) {
-    const thunk = removeTodolistTC(id)
+  const removeTodolistHandler = React.useCallback(function (id: string) {
+    const thunk = removeTodolist(id)
     dispatch(thunk)
   }, [])
 
-  const changeTodolistTitle = React.useCallback(function (id: string, title: string) {
-    const thunk = changeTodolistTitleTC(id, title)
+  const changeTodolistTitleHandler = React.useCallback(function (id: string, title: string) {
+    const thunk = changeTodolistTitle({ id, title })
     dispatch(thunk)
   }, [])
 
-  const addTodolist = React.useCallback(
+  const addTodolistHandler = React.useCallback(
     (title: string) => {
-      const thunk = addTodolistTC(title)
+      const thunk = addTodolist(title)
       dispatch(thunk)
     },
     [dispatch],
@@ -85,7 +89,7 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
   return (
     <>
       <Grid container style={{ padding: '20px' }}>
-        <AddItemForm addItem={addTodolist} />
+        <AddItemForm addItem={addTodolistHandler} />
       </Grid>
       <Grid container spacing={3}>
         {todolists.map((tl) => {
@@ -101,9 +105,9 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
                   changeFilter={changeFilter}
                   addTaskHandler={addTaskHandler}
                   changeTaskStatus={changeStatus}
-                  removeTodolist={removeTodolist}
+                  removeTodolistHandler={removeTodolistHandler}
                   changeTaskTitle={changeTaskTitle}
-                  changeTodolistTitle={changeTodolistTitle}
+                  changeTodolistTitle={changeTodolistTitleHandler}
                   demo={demo}
                 />
               </Paper>
