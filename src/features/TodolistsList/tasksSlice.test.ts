@@ -186,21 +186,21 @@ test('title of specified task should be changed', () => {
 })
 
 test('new array should be added when new todolist is added', () => {
-type Action = TestAction<typeof addTodolist.fulfilled>
+  type Action = TestAction<typeof addTodolist.fulfilled>
 
   const action: Action = {
     type: addTodolist.fulfilled.type,
     payload: {
-	 todolist: {
-	   id: 'blablas',
-	   title: 'new todolist',
-	   order: 0,
-	   addedDate: '',
-	 },
+      todolist: {
+        id: 'blablas',
+        title: 'new todolist',
+        order: 0,
+        addedDate: '',
+      },
     },
   }
 
-//   const action = addTodolist({ todolist: { id: 'blablas', title: 'new todolist', order: 0, addedDate: '' } })
+  //   const action = addTodolist({ todolist: { id: 'blablas', title: 'new todolist', order: 0, addedDate: '' } })
 
   const endState = tasksReducer(startState, action)
 
@@ -215,7 +215,14 @@ type Action = TestAction<typeof addTodolist.fulfilled>
   expect(endState[newKey]).toEqual([])
 })
 test('propertry with todolistId should be deleted', () => {
-  const action = removeTodolist({ id: 'todolistId2' })
+  type Action = TestAction<typeof removeTodolist.fulfilled>
+  const action: Action = {
+    type: removeTodolist.fulfilled.type,
+    payload: {
+      id: 'todolistId2',
+    },
+  }
+  //   const action = removeTodolist({ id: 'todolistId2' })
 
   const endState = tasksReducer(startState, action)
 
