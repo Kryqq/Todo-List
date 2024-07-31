@@ -1,9 +1,8 @@
 import { addTodolist, clearLogoutData, removeTodolist, setTodolists } from './todolistsSlice'
 
-
 import { setAppStatus } from 'app/appSlice'
 import { handleServerAppError } from 'utils/error-utils'
-import {  createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { createAppAsyncThunk } from 'utils/createAsyncThunk'
 import { handleServerNetworkError } from 'utils/handleServerNetworkError'
 import { TaskType, todolistsAPI, UpdateTaskModelType } from './todolists-api'
@@ -34,7 +33,7 @@ const slice = createSlice({
     builder.addCase(addTodolist.fulfilled, (state, action) => {
       state[action.payload.todolist.id] = []
     }),
-      builder.addCase(removeTodolist, (state, action) => {
+      builder.addCase(removeTodolist.fulfilled, (state, action) => {
         delete state[action.payload.id]
       }),
       builder.addCase(setTodolists, (state, action) => {
@@ -122,13 +121,13 @@ type RemoveTask = {
 
 export const removeTask = createAppAsyncThunk<RemoveTask, RemoveTask>(
   `${slice.name}/removeTask`,
-
   async (arg, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
+    dispatch(setAppStatus({ status: 'loading' }))
+    dispatch(setAppStatus({ status: 'succeeded' }))
     try {
-      dispatch(setAppStatus({ status: 'loading' }))
-      todolistsAPI.deleteTask(arg.todolistId, arg.todolistId)
-      dispatch(setAppStatus({ status: 'succeeded' }))
+      todolistsAPI.deleteTask(arg.todolistId, arg.taskId)
+
       return { taskId: arg.taskId, todolistId: arg.todolistId }
     } catch (error) {
       handleServerNetworkError(dispatch, error)
@@ -159,7 +158,7 @@ export const addTask = createAppAsyncThunk<{ task: TaskType }, { title: string; 
   },
 )
 
-// export const _addTaskTC =
+// export const _addTask=
 //   (title: string, todolistId: string): AppThunk =>
 //   (dispatch) => {
 //     dispatch(setAppStatus({ status: 'loading' }))
@@ -221,7 +220,7 @@ export const updateTask = createAppAsyncThunk<UpdateTaskArgs, UpdateTaskArgs>(
   },
 )
 
-// export const updateTaskTC =
+// export const updateTask=
 //   (taskId: string, domainModel: UpdateDomainTaskModelType, todolistId: string): AppThunk =>
 //   (dispatch, getState: () => AppRootStateType) => {
 //     const state = getState()
