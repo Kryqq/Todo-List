@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppRootStateType } from './store'
 import { initializeAppTC, RequestStatusType } from './appSlice'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
- 
-import { logoutTC } from '../features/auth/model/authSlice'
+
+import { logout } from '../features/auth/model/authSlice'
 import {
   AppBar,
   Button,
@@ -36,7 +36,7 @@ const App = ({ demo = false }: PropsType) => {
   }, [])
 
   const logoutHandler = React.useCallback(() => {
-    dispatch(logoutTC())
+    dispatch(logout())
   }, [])
 
   if (!isInitialized) {
@@ -46,7 +46,7 @@ const App = ({ demo = false }: PropsType) => {
       </div>
     )
   }
-
+ 
   return (
     <BrowserRouter>
       <div className="App">
