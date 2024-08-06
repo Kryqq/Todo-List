@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField } from '@mui/material'
 import { useAppDispatch } from 'hooks/useAppDispatch'
-import { loginTC } from '../model/authSlice'
+import { login} from '../model/authSlice'
 import { AppRootStateType } from 'app/store'
 
 export const Login = () => {
@@ -31,7 +31,7 @@ export const Login = () => {
       rememberMe: false,
     },
     onSubmit: (values) => {
-      dispatch(loginTC(values))
+       dispatch(login(values))
     },
   })
 
@@ -52,8 +52,8 @@ export const Login = () => {
                 </a>
               </p>
               <p>or use common test account credentials:</p>
-              <p> Email: free@samuraijs.com</p>
-              <p>Password: free</p>
+              <p> Email: youremail@mail.com</p>
+              <p>Password: 123123</p>
             </FormLabel>
             <FormGroup>
               <TextField label="Email" margin="normal" {...formik.getFieldProps('email')} />
