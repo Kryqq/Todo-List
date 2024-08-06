@@ -3,10 +3,10 @@ import './App.css'
 import { TodolistsList } from 'features/TodolistsList/TodolistsList'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppRootStateType } from './store'
-import { initializeAppTC, RequestStatusType } from './appSlice'
+import { RequestStatusType } from './appSlice'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import { logout } from '../features/auth/model/authSlice'
+import { initializeApp, logout } from '../features/auth/model/authSlice'
 import {
   AppBar,
   Button,
@@ -32,7 +32,7 @@ const App = ({ demo = false }: PropsType) => {
   const dispatch = useDispatch<any>()
 
   React.useEffect(() => {
-    dispatch(initializeAppTC())
+    dispatch(initializeApp())
   }, [])
 
   const logoutHandler = React.useCallback(() => {
