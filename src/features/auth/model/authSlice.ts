@@ -1,6 +1,5 @@
 import { handleServerAppError } from 'utils/error-utils'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AppThunk } from 'app/store'
 import { setAppStatus, setIsInitialized } from 'app/appSlice'
 import { clearLogoutData } from 'features/TodolistsList/todolistsSlice'
 import { handleServerNetworkError } from 'utils/handleServerNetworkError'
@@ -42,15 +41,16 @@ export const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, void>(
     try {
       const res = await authAPI.me()
       if (res.data.resultCode === 0) {
-        dispatch(setIsInitialized({ isInitialized: true }))
         return { isLoggedIn: true }
       } else {
-        handleServerAppError(dispatch, res.data)
+        handleServerAppError(dispatch, res.data, false)
         return rejectWithValue(null)
       }
     } catch (error) {
       handleServerNetworkError(dispatch, error)
       return rejectWithValue(null)
+    } finally {
+      dispatch(setIsInitialized({ isInitialized: true }))
     }
   },
 )
@@ -77,8 +77,9 @@ export const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsTyp
         dispatch(setAppStatus({ status: 'succeeded' }))
         return { isLoggedIn: true }
       } else {
-        handleServerAppError(dispatch, res.data)
-        return rejectWithValue(null)
+        handleServerAppError(dispatch, res.data, false)
+        dispatch(setAppStatus({ status: 'failed' }))
+        return rejectWithValue(res.data)
       }
     } catch (error) {
       handleServerNetworkError(dispatch, error)
