@@ -1,12 +1,5 @@
-import { Dispatch } from 'redux'
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AppThunk } from './store'
-import { authAPI } from 'features/auth/api/authAPI'
  
-import { createAppAsyncThunk } from 'utils/createAsyncThunk'
-import { handleServerNetworkError } from 'utils/handleServerNetworkError'
-import { handleServerAppError } from 'utils/error-utils'
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
