@@ -7,6 +7,7 @@ import { createAppAsyncThunk } from 'utils/createAsyncThunk'
 import { handleServerNetworkError } from 'utils/handleServerNetworkError'
 import { TaskType, todolistsAPI, UpdateTaskModelType } from './todolists-api'
 import { ResultCode, TaskPriorities, TaskStatuses } from 'common/types/enums/enums'
+import { thunkTryCatch } from 'utils/thunkTryCatch'
 
 const initialState: TasksStateType = {}
 
@@ -138,23 +139,18 @@ export const removeTask = createAppAsyncThunk<RemoveTask, RemoveTask>(
 
 export const addTask = createAppAsyncThunk<{ task: TaskType }, { title: string; todolistId: string }>(
   `${slice.name}/addTask`,
-  async (arg, thunkAPI) => {
+  (arg, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
-    try {
-      dispatch(setAppStatus({ status: 'loading' }))
+    return thunkTryCatch(thunkAPI, async () => {
       const res = await todolistsAPI.createTask(arg)
       if (res.data.resultCode === ResultCode.Success) {
-        dispatch(setAppStatus({ status: 'succeeded' }))
         const task = res.data.data.item
         return { task }
       } else {
         handleServerAppError(dispatch, res.data)
         return rejectWithValue(null)
       }
-    } catch (error) {
-      handleServerNetworkError(dispatch, error)
-      return rejectWithValue(null)
-    }
+    })
   },
 )
 

@@ -6,6 +6,9 @@ import { handleServerNetworkError } from 'utils/handleServerNetworkError'
 import { todolistsAPI, TodolistType } from './todolists-api'
 import { createAppAsyncThunk } from 'utils/createAsyncThunk'
 import { strict } from 'assert'
+import { ResultCode } from 'common/types/enums/enums'
+import { handleServerAppError } from 'utils/error-utils'
+import { thunkTryCatch } from 'utils/thunkTryCatch'
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 export type TodolistDomainType = TodolistType & {
@@ -185,17 +188,17 @@ export const removeTodolist = createAppAsyncThunk<{ id: string }, string>(
 
 export const addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, string>(
   `${slice.name}/addTodolist`,
-  async (title, thunkAPI) => {
+    (title, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
-    try {
-      dispatch(setAppStatus({ status: 'loading' }))
+    return thunkTryCatch(thunkAPI, async () => {
       const res = await todolistsAPI.createTodolist(title)
-      dispatch(setAppStatus({ status: 'succeeded' }))
-      return { todolist: res.data.data.item }
-    } catch (error) {
-      handleServerNetworkError(dispatch, error)
-      return rejectWithValue(null)
-    }
+      if (res.data.resultCode === ResultCode.Success) {
+        return { todolist: res.data.data.item }
+      } else {
+        handleServerAppError(dispatch, res.data)
+        return rejectWithValue(null)
+      }
+    })
   },
 )
 
