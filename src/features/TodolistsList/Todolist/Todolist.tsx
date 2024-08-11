@@ -4,7 +4,7 @@ import { EditableSpan } from 'components/EditableSpan/EditableSpan'
 import { Task } from './Task/Task'
 
 import { FilterValuesType, TodolistDomainType } from '../todolistsSlice'
-import { fetchTasks } from '../tasksSlice'
+import { fetchTasks, selectFilteredTasks } from '../tasksSlice'
 import { Button, IconButton } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { useAppDispatch } from 'hooks/useAppDispatch'
@@ -28,7 +28,7 @@ type PropsType = {
 export const Todolist = React.memo(function ({ demo = false, ...props }: PropsType) {
   const dispatch = useAppDispatch()
 
-  let tasksForTodolist = useAppSelector((state) => state.tasks[props.todolist.id])
+  let tasksForTodolist = useAppSelector((state) =>  selectFilteredTasks(state, props.todolist.filter, props.todolist.id))
 
   React.useEffect(() => {
     if (demo) {
@@ -68,12 +68,7 @@ export const Todolist = React.memo(function ({ demo = false, ...props }: PropsTy
     [props.todolist.id, props.changeFilter],
   )
 
-  if (props.todolist.filter === 'active') {
-    tasksForTodolist = tasksForTodolist.filter((t) => t.status === TaskStatuses.New)
-  }
-  if (props.todolist.filter === 'completed') {
-    tasksForTodolist = tasksForTodolist.filter((t) => t.status === TaskStatuses.Completed)
-  }
+
 
   return (
     <div>
