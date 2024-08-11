@@ -6,6 +6,8 @@ import { handleServerNetworkError } from 'utils/handleServerNetworkError'
 import { LoginParamsType } from '../api/authAPI.types'
 import { authAPI } from '../api/authAPI'
 import { createAppAsyncThunk } from 'utils/createAsyncThunk'
+import { thunkTryCatch } from 'utils/thunkTryCatch'
+import { ResultCode } from 'common/types/enums/enums'
 
 const initialState: InitialStateType = {
   isLoggedIn: false,
@@ -37,24 +39,22 @@ export const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, void>(
   `${slice.name}/initializeApp`,
   async (_, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
-
-    try {
+    return thunkTryCatch(thunkAPI, async () => {
       const res = await authAPI.me()
-      if (res.data.resultCode === 0) {
+      if (res.data.resultCode === ResultCode.Success) {
         return { isLoggedIn: true }
       } else {
-        handleServerAppError(dispatch, res.data, false)
+        handleServerAppError(dispatch, res.data)
         return rejectWithValue(null)
       }
-    } catch (error) {
-      handleServerNetworkError(dispatch, error)
-      return rejectWithValue(null)
-    } finally {
+    }).finally(() => {
       dispatch(setIsInitialized({ isInitialized: true }))
-    }
+    })
   },
 )
-
+// finally {
+// 	dispatch(setIsInitialized({ isInitialized: true }))
+//    }
 // export const _authReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
 //   switch (action.type) {
 //     case 'login/SET-IS-LOGGED-IN':
