@@ -4,16 +4,17 @@ import { EditableSpan } from 'components/EditableSpan/EditableSpan'
 import { Task } from './Task/Task'
 
 import { FilterValuesType, TodolistDomainType } from '../todolistsSlice'
-import { fetchTasks} from '../tasksSlice'
+import { fetchTasks } from '../tasksSlice'
 import { Button, IconButton } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { useAppDispatch } from 'hooks/useAppDispatch'
 import { TaskStatuses } from 'common/types/enums/enums'
 import { TaskType } from '../todolists-api'
+import { useAppSelector } from 'app/store'
 
 type PropsType = {
   todolist: TodolistDomainType
-  tasks: Array<TaskType>
+
   changeFilter: (value: FilterValuesType, todolistId: string) => void
   addTaskHandler: (title: string, todolistId: string) => void
   changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
@@ -26,6 +27,8 @@ type PropsType = {
 
 export const Todolist = React.memo(function ({ demo = false, ...props }: PropsType) {
   const dispatch = useAppDispatch()
+
+  let tasksForTodolist = useAppSelector((state) => state.tasks[props.todolist.id])
 
   React.useEffect(() => {
     if (demo) {
@@ -65,13 +68,11 @@ export const Todolist = React.memo(function ({ demo = false, ...props }: PropsTy
     [props.todolist.id, props.changeFilter],
   )
 
-  let tasksForTodolist = props.tasks
-
   if (props.todolist.filter === 'active') {
-    tasksForTodolist = props.tasks.filter((t) => t.status === TaskStatuses.New)
+    tasksForTodolist = tasksForTodolist.filter((t) => t.status === TaskStatuses.New)
   }
   if (props.todolist.filter === 'completed') {
-    tasksForTodolist = props.tasks.filter((t) => t.status === TaskStatuses.Completed)
+    tasksForTodolist = tasksForTodolist.filter((t) => t.status === TaskStatuses.Completed)
   }
 
   return (
