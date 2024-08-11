@@ -55,11 +55,21 @@ const slice = createSlice({
   },
   selectors: {
     selectTaskByTodolist: (state, todolistId: string) => state[todolistId],
+    selectFilteredTasks: (state, filter, todolistId) => {
+      let tasksForTodolist = state[todolistId]
+      if (filter === 'active') {
+        tasksForTodolist = tasksForTodolist.filter((t) => t.status === TaskStatuses.New)
+      }
+      if (filter === 'completed') {
+        tasksForTodolist = tasksForTodolist.filter((t) => t.status === TaskStatuses.Completed)
+      }
+      return tasksForTodolist
+    },
   },
 })
 
 export const tasksReducer = slice.reducer
-export const { selectTaskByTodolist } = slice.selectors
+export const { selectTaskByTodolist, selectFilteredTasks } = slice.selectors
 
 // export const _tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
 //   switch (action.type) {
