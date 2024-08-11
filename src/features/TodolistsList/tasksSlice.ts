@@ -53,9 +53,13 @@ const slice = createSlice({
       }
     })
   },
+  selectors: {
+    selectTaskByTodolist: (state, todolistId: string) => state[todolistId],
+  },
 })
 
 export const tasksReducer = slice.reducer
+export const { selectTaskByTodolist } = slice.selectors
 
 // export const _tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
 //   switch (action.type) {
@@ -177,7 +181,7 @@ export const addTask = createAppAsyncThunk<{ task: TaskType }, { title: string; 
 
 export type UpdateTaskArgs = {
   taskId: string
-  model: UpdateDomainTaskModelType
+  model: Partial<UpdateTaskModelType>
   todolistId: string
 }
 
@@ -251,14 +255,6 @@ export const updateTask = createAppAsyncThunk<UpdateTaskArgs, UpdateTaskArgs>(
 //       })
 //   }
 
-export type UpdateDomainTaskModelType = {
-  title?: string
-  description?: string
-  status?: TaskStatuses
-  priority?: TaskPriorities
-  startDate?: string
-  deadline?: string
-}
 export type TasksStateType = {
   [key: string]: Array<TaskType>
 }
