@@ -1,6 +1,5 @@
 import { RequestStatusType, setAppStatus } from 'app/appSlice'
 
-import { AppThunk } from 'app/store'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { handleServerNetworkError } from 'utils/handleServerNetworkError'
 import { todolistsAPI, TodolistType } from './todolists-api'
