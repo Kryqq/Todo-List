@@ -7,38 +7,14 @@ import { useAppDispatch } from 'hooks/useAppDispatch'
 import { login } from '../model/authSlice'
 import { AppRootStateType } from 'app/store'
 import { BaseResponse } from 'common/types/types'
+import { LoginParamsType } from '../api/authAPI.types'
 
 export const Login = () => {
-  const dispatch = useAppDispatch()
+ 
 
   const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
 
-  const formik = useFormik({
-    validate: (values) => {
-      //  if (!values.email) {
-      //    return {
-      //      email: 'Email is required',
-      //    }
-      //  }
-      //  if (!values.password) {
-      //    return {
-      //      password: 'Password is required',
-      //    }
-      //  }
-    },
-    initialValues: {
-      email: '',
-      password: '',
-      rememberMe: false,
-    },
-    onSubmit: (values, formikHelpers) => {
-      dispatch(login(values))
-        .unwrap()
-        .catch((error: BaseResponse) => {
-          error.fieldsErrors?.forEach((el) => formikHelpers.setFieldError(el.field, el.error))
-        })
-    },
-  })
+
 
   if (isLoggedIn) {
     return <Navigate to={'/'} />
