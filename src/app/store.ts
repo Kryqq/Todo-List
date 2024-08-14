@@ -1,5 +1,5 @@
-import { tasksReducer } from 'features/TodolistsList/tasksSlice'
-import { todolistsReducer } from 'features/TodolistsList/todolistsSlice'
+import { tasksReducer } from 'features/TodolistsList/model/tasksSlice'
+import { todolistsReducer } from 'features/TodolistsList/model/todolistsSlice'
 
 import { appReducer } from './appSlice'
 

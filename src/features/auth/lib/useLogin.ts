@@ -3,9 +3,12 @@ import { useAppDispatch } from 'hooks/useAppDispatch'
 import { LoginParamsType } from '../api/authAPI.types'
 import { BaseResponse } from 'common/types/types'
 import { login } from '../model/authSlice'
+import { useSelector } from 'react-redux'
+import { AppRootStateType } from 'app/store'
 
 export const useLogin = () => {
   const dispatch = useAppDispatch()
+  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
   const formik = useFormik({
     validate: (values) => {
       const errors: Partial<LoginParamsType> = {}
@@ -34,4 +37,5 @@ export const useLogin = () => {
         })
     },
   })
+  return { formik, isLoggedIn }
 }

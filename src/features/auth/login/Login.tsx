@@ -1,20 +1,11 @@
-import React from 'react'
-import { useFormik } from 'formik'
 import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField } from '@mui/material'
-import { useAppDispatch } from 'hooks/useAppDispatch'
-import { login } from '../model/authSlice'
 import { AppRootStateType } from 'app/store'
-import { BaseResponse } from 'common/types/types'
-import { LoginParamsType } from '../api/authAPI.types'
+import { useLogin } from '../lib/useLogin'
 
 export const Login = () => {
- 
-
-  const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
-
-
+  const { formik, isLoggedIn } = useLogin()
 
   if (isLoggedIn) {
     return <Navigate to={'/'} />
