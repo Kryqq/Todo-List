@@ -1,7 +1,7 @@
 import { handleServerAppError } from 'utils/error-utils'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { setAppStatus, setIsInitialized } from 'app/appSlice'
-import { clearLogoutData } from 'features/TodolistsList/todolistsSlice'
+import { clearLogoutData } from 'features/TodolistsList/model/todolistsSlice'
 import { handleServerNetworkError } from 'utils/handleServerNetworkError'
 import { LoginParamsType } from '../api/authAPI.types'
 import { authAPI } from '../api/authAPI'
