@@ -1,6 +1,5 @@
 import React from 'react'
-import './App.css'
-import { TodolistsList } from 'features/TodolistsList/TodolistsList'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { AppRootStateType } from './store'
 import { RequestStatusType } from './appSlice'
@@ -20,6 +19,7 @@ import {
 import { Menu } from '@mui/icons-material'
 import { ErrorSnackbar } from 'components/ErrorSnackbar/ErrorSnackbar'
 import { Login } from 'features/auth/login/Login'
+import { TodolistsList } from 'features/TodolistsList/ui/TodolistsList'
 
 type PropsType = {
   demo?: boolean
