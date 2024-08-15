@@ -1,4 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, isFulfilled, isPending, isRejected, PayloadAction } from '@reduxjs/toolkit'
+import axios from 'axios'
+import { RejectActionError } from 'common/types/types'
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
 
@@ -24,30 +26,46 @@ const slice = createSlice({
   },
 
   extraReducers: (builder) => {
-    builder.addMatcher(
-      (action) => {
-        return action.type.endsWith('/pending')
-      },
-      (state, action) => {
+    builder
+      .addMatcher(isPending, (state, action) => {
         state.status = 'loading'
-      },
-    ),
-      builder.addMatcher(
-        (action) => {
-          return action.type.endsWith('/rejected')
+      })
+      .addMatcher(isRejected, (state, action) => {
+        state.status = 'failed'
+      })
+      .addMatcher(isFulfilled, (state, action) => {
+        state.status = 'idle'
+      })
+      .addMatcher(
+        (action): action is PayloadAction<RejectActionError> => {
+          return isRejected(action) && action.payload
         },
-        (state, action) => {
-          state.status = 'failed'
+        (state, action: PayloadAction<RejectActionError>) => {
+          const defaultMessage = 'Some error occured'
+          switch (action.payload.type) {
+            case 'appError': {
+              const error = action.payload.error
+              state.error = error.messages.length ? error.messages[0] : 'Some error occured'
+              break
+            }
+
+            case 'catchError':
+              {
+                const error = action.payload.error
+                if (axios.isAxiosError(error)) {
+                  state.error = error.response?.data?.message || error?.message || defaultMessage
+                } else if (error instanceof Error) {
+                  state.error = `Native error: ${error.message}`
+                } else {
+                  state.error = JSON.stringify(error)
+                }
+              }
+              break
+            default:
+              break
+          }
         },
       )
-    builder.addMatcher(
-      (action) => {
-        return action.type.endsWith('/fulfilled')
-      },
-      (state, action) => {
-        state.status = 'idle'
-      },
-    )
   },
 })
 
