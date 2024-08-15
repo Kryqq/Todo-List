@@ -9,13 +9,13 @@ type ThunkAPI = BaseThunkAPI<AppRootStateType, unknown, AppDispatch, null | Base
 
 export const thunkTryCatch = async <T> ({dispatch, rejectWithValue}: ThunkAPI, fn: ()=> Promise<T>,): Promise<T | ReturnType <typeof rejectWithValue>> =>{
 	try {
-		dispatch(setAppStatus({status: 'loading'}))
+		// dispatch(setAppStatus({status: 'loading'}))
 		return await fn()
 	} catch (error) {
 		handleServerNetworkError(dispatch, error)
 		return rejectWithValue(null)
 	} finally {
-		dispatch(setAppStatus({status: 'idle'}))
+		// dispatch(setAppStatus({status: 'idle'}))
 	}
 
 }
