@@ -21,6 +21,7 @@ export const AddItemForm = function (props: AddItemFormPropsType) {
         .then(unwrapResult)
         .then(() => setTitle(''))
         .catch((error: BaseResponse) => {
+          //TODO add error
           setError(error.messages[0])
         })
     }
