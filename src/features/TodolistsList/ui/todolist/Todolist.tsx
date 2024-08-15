@@ -1,14 +1,12 @@
 import React from 'react'
 import { AddItemForm } from 'components/AddItemForm/AddItemForm'
-import { EditableSpan } from 'components/EditableSpan/EditableSpan'
-import { Task } from './task/Task'
-import { changeTodolistTitle, removeTodolist, TodolistDomainType } from '../../model/todolistsSlice'
+import { TodolistDomainType } from '../../model/todolistsSlice'
 import { addTask, fetchTasks, selectFilteredTasks } from '../../model/tasksSlice'
-import { IconButton } from '@mui/material'
-import { Delete } from '@mui/icons-material'
 import { useAppDispatch } from 'hooks/useAppDispatch'
 import { useAppSelector } from 'app/store'
 import { FilterTasksButton } from './filterTasksButton/FilterTasksButton'
+import { Tasks } from './tasks/Tasks'
+import { TodolistTitle } from './todolistTitle/TodolistTitle'
 
 type PropsType = {
   todolist: TodolistDomainType
@@ -32,27 +30,13 @@ export const Todolist = ({ demo = false, ...props }: PropsType) => {
     dispatch(addTask({ title, todolistId: props.todolist.id }))
   }
 
-  const removeTodolistHandler = () => {
-    dispatch(removeTodolist(props.todolist.id))
-  }
-  const changeTodolistTitleHandler = (title: string) => {
-    dispatch(changeTodolistTitle({ id: props.todolist.id, title }))
-  }
-
   return (
     <div>
-      <h3>
-        <EditableSpan value={props.todolist.title} onChange={changeTodolistTitleHandler} />
-        <IconButton onClick={removeTodolistHandler} disabled={props.todolist.entityStatus === 'loading'}>
-          <Delete />
-        </IconButton>
-      </h3>
+      <TodolistTitle todolist={props.todolist} />
 
       <AddItemForm addItem={addTaskHandler} disabled={props.todolist.entityStatus === 'loading'} />
 
-      <div>
-        {tasksForTodolist && tasksForTodolist.map((t) => <Task key={t.id} task={t} todolistId={props.todolist.id} />)}
-      </div>
+      <Tasks tasksForTodolist={tasksForTodolist} todolist={props.todolist} />
 
       <div style={{ paddingTop: '10px' }}>
         <FilterTasksButton todolist={props.todolist} />
