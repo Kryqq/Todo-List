@@ -2,22 +2,27 @@ import React, { ChangeEvent, KeyboardEvent } from 'react'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import { AddBox } from '@mui/icons-material'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { BaseResponse } from 'common/types/types'
 
 type AddItemFormPropsType = {
-  addItem: (title: string) => void
+  addItem: (title: string) => Promise<any>
   disabled?: boolean
 }
 
-export const AddItemForm = React.memo(function (props: AddItemFormPropsType) {
+export const AddItemForm = function (props: AddItemFormPropsType) {
   let [title, setTitle] = React.useState('')
   let [error, setError] = React.useState<string | null>(null)
 
   const addItem = () => {
     if (title.trim() !== '') {
-      props.addItem(title)
-      setTitle('')
-    } else {
-      setError('Title is required')
+      props
+        .addItem(title)
+        .then(unwrapResult)
+        .then(() => setTitle(''))
+        .catch((error: BaseResponse) => {
+          setError(error.messages[0])
+        })
     }
   }
 
@@ -51,4 +56,4 @@ export const AddItemForm = React.memo(function (props: AddItemFormPropsType) {
       </IconButton>
     </div>
   )
-})
+}
