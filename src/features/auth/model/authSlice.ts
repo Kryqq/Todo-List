@@ -1,5 +1,5 @@
 import { handleServerAppError } from 'utils/error-utils'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, isAnyOf, isFulfilled, PayloadAction } from '@reduxjs/toolkit'
 import { setAppStatus, setIsInitialized } from 'app/appSlice'
 import { clearLogoutData } from 'features/TodolistsList/model/todolistsSlice'
 import { handleServerNetworkError } from 'utils/handleServerNetworkError'
@@ -23,17 +23,19 @@ const slice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      (action) => {
-        if (
-          action.type === login.fulfilled.type ||
-          action.type === logout.fulfilled.type ||
-          action.type === initializeApp.fulfilled.type
-        ) {
-          return true
-        } else {
-          return false
-        }
-      },
+      //  (action) => {
+      //  isFulfilled(login, logout, initializeApp),
+      isAnyOf(login.fulfilled, logout.fulfilled, initializeApp.fulfilled),
+      //    if (
+      //      action.type === login.fulfilled.type ||
+      //      action.type === logout.fulfilled.type ||
+      //      action.type === initializeApp.fulfilled.type
+      //    ) {
+      //      return true
+      //    } else {
+      //      return false
+      //    }
+      //  },
       (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
         state.isLoggedIn = action.payload.isLoggedIn
       },
