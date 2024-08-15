@@ -6,6 +6,7 @@ import { TaskStatuses } from 'common/types/enums/enums'
 import { TaskType } from 'features/TodolistsList/api/tasksAPI.types'
 import { useAppDispatch } from 'hooks/useAppDispatch'
 import { removeTask, updateTask } from 'features/TodolistsList/model/tasksSlice'
+import styles from './Task.module.css'
 
 type Props = {
   task: TaskType
@@ -42,7 +43,7 @@ export const Task = (props: Props) => {
   let checked = props.task.status === TaskStatuses.Completed
 
   return (
-    <div key={props.task.id} className={checked ? 'is-done' : ''}>
+    <div key={props.task.id} className={checked ? styles.isDone : ''}>
       <Checkbox checked={checked} color="primary" onChange={changeTaskStatusHandler} />
 
       <EditableSpan value={props.task.title} onChange={changeTaskTitleHandler} />
