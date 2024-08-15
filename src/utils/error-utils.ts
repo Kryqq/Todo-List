@@ -15,7 +15,7 @@ export const handleServerAppError = <T>(
   isShowGlobalError: boolean = true,
 ): void => {
   if (isShowGlobalError) {
-    dispatch(setAppError({ error: data.messages.length ? data.messages[0] : 'Some error occurred' }))
+//     dispatch(setAppError({ error: data.messages.length ? data.messages[0] : 'Some error occurred' }))
   }
 
   dispatch(setAppStatus({ status: 'failed' }))
