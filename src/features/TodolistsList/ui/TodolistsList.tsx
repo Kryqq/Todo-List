@@ -1,9 +1,5 @@
 import React from 'react'
-import {
-  addTodolist,
-  fetchTodolists,
-  TodolistDomainType,
-} from '../model/todolistsSlice'
+import { addTodolist, fetchTodolists, TodolistDomainType } from '../model/todolistsSlice'
 import { useAppDispatch } from 'hooks/useAppDispatch'
 import { useSelector } from 'react-redux'
 import { AppRootStateType } from 'app/store'
@@ -12,8 +8,6 @@ import Grid from '@mui/material/Grid/Grid'
 import { AddItemForm } from 'components/AddItemForm/AddItemForm'
 import Paper from '@mui/material/Paper/Paper'
 import { Todolist } from './todolist/Todolist'
-
-
 
 type PropsType = {
   demo?: boolean
@@ -34,13 +28,9 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
     dispatch(thunk)
   }, [])
 
-  const addTodolistHandler = React.useCallback(
-    (title: string) => {
-      const thunk = addTodolist(title)
-      dispatch(thunk)
-    },
-    [dispatch],
-  )
+  const addTodolistHandler = (title: string) => {
+    return dispatch(addTodolist(title))
+  }
 
   if (!isLoggedIn) {
     return <Navigate to={'/login'} />

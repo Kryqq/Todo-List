@@ -195,8 +195,8 @@ export const addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, strin
       if (res.data.resultCode === ResultCode.Success) {
         return { todolist: res.data.data.item }
       } else {
-        handleServerAppError(dispatch, res.data)
-        return rejectWithValue(null)
+        handleServerAppError(dispatch, res.data, false)
+        return rejectWithValue(res.data)
       }
     })
   },

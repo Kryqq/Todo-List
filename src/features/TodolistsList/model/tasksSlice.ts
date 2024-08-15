@@ -30,7 +30,6 @@ const slice = createSlice({
         tasks[index] = { ...tasks[index], ...action.payload.model }
       }
     })
-
     builder.addCase(addTodolist.fulfilled, (state, action) => {
       state[action.payload.todolist.id] = []
     }),
@@ -161,8 +160,8 @@ export const addTask = createAppAsyncThunk<{ task: TaskType }, { title: string; 
         const task = res.data.data.item
         return { task }
       } else {
-        handleServerAppError(dispatch, res.data)
-        return rejectWithValue(null)
+        handleServerAppError(dispatch, res.data, false)
+        return rejectWithValue(res.data)
       }
     })
   },
