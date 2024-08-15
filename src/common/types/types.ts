@@ -11,3 +11,13 @@ export type BaseResponse<D = {}> = {
   data: D
   fieldsErrors: FiledErrorType[]
 }
+export type RejectAppError = {
+  error: BaseResponse
+  type: 'appError'
+}
+export type RejectCatchError = {
+  error: unknown
+  type: 'catchError'
+}
+
+export type RejectActionError = RejectAppError | RejectCatchError
