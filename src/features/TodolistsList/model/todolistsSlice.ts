@@ -125,7 +125,6 @@ export const fetchTodolists = createAppAsyncThunk<{ todolists: Array<TodolistTyp
   `${slice.name}/fetchTodolists`,
   async (_, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
-
     try {
       dispatch(setAppStatus({ status: 'loading' }))
       const res = await todolistsAPI.getTodolists()
