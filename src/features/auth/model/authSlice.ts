@@ -2,12 +2,13 @@ import { handleServerAppError } from 'utils/error-utils'
 import { createSlice, isAnyOf, isFulfilled, PayloadAction } from '@reduxjs/toolkit'
 import { setAppStatus, setIsInitialized } from 'app/appSlice'
 import { clearLogoutData } from 'features/TodolistsList/model/todolistsSlice'
-import { handleServerNetworkError } from 'utils/handleServerNetworkError'
+
 import { LoginParamsType } from '../api/authAPI.types'
 import { authAPI } from '../api/authAPI'
 import { createAppAsyncThunk } from 'utils/createAsyncThunk'
 import { thunkTryCatch } from 'utils/thunkTryCatch'
 import { ResultCode } from 'common/types/enums/enums'
+import { RejectAppError, RejectCatchError } from 'common/types/types'
 
 const initialState: InitialStateType = {
   isLoggedIn: false,
@@ -53,7 +54,7 @@ export const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, void>(
         return { isLoggedIn: true }
       } else {
         handleServerAppError(dispatch, res.data)
-        return rejectWithValue(null)
+        return rejectWithValue({ error: res.data, type: 'appError' } as RejectAppError)
       }
     }).finally(() => {
       dispatch(setIsInitialized({ isInitialized: true }))
@@ -88,11 +89,11 @@ export const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsTyp
         const isShowAppError = !res.data.fieldsErrors.length
         handleServerAppError(dispatch, res.data, isShowAppError)
         dispatch(setAppStatus({ status: 'failed' }))
-        return rejectWithValue(res.data)
+        return rejectWithValue({ error: res.data, type: 'appError' } as RejectAppError)
       }
     } catch (error) {
-      handleServerNetworkError(dispatch, error)
-      return rejectWithValue(null)
+      //  handleServerNetworkError(dispatch, error)
+      return rejectWithValue({ error, type: 'catchError' } as RejectCatchError)
     }
   },
 )
@@ -128,11 +129,11 @@ export const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, void>(
         return { isLoggedIn: false }
       } else {
         handleServerAppError(dispatch, res.data)
-        return rejectWithValue(null)
+        return rejectWithValue({ error: res.data, type: 'appError' } as RejectAppError)
       }
     } catch (error) {
-      handleServerNetworkError(dispatch, error)
-      return rejectWithValue(null)
+      //  handleServerNetworkError(dispatch, error)
+      return rejectWithValue({ error, type: 'catchError' } as RejectCatchError)
     }
   },
 )
