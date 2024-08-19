@@ -12,7 +12,7 @@ export type BaseResponse<D = {}> = {
   fieldsErrors: FiledErrorType[]
 }
 export type RejectAppError = {
-  error: BaseResponse
+  error: BaseResponse | string 
   type: 'appError'
 }
 export type RejectCatchError = {
